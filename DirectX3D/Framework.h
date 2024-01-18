@@ -128,6 +128,8 @@ using namespace Utility;
 #include "Framework/Model/ModelMesh.h"
 #include "Framework/Model/ModelExporter.h"
 #include "Framework/Model/Model.h"
+#include "Framework/Model/ModelClip.h"
+#include "Framework/Model/ModelAnimator.h"
 
 using namespace GameMath;
 

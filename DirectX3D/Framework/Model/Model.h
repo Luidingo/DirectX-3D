@@ -18,7 +18,7 @@ private:
     void ReadMaterial();
     void ReadMesh();
 
-private:
+protected:
     string name; //이 모델의 이름
 
     //모델이 존재하기 위한 하위 데이터들
