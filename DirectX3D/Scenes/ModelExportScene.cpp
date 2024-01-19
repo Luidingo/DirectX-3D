@@ -3,7 +3,6 @@
 
 ModelExportScene::ModelExportScene()
 {
-
 	string modelName = "Fox"; // 모델의 이름
 	string filePath = "Models/FBX/" + modelName + ".fbx";
 
@@ -13,10 +12,22 @@ ModelExportScene::ModelExportScene()
 								// 반대로 텍스처가 따로 없고 모든 데이터가 있다면 추출을 할 것
 								// 결국 원형에 대한 사전 조사(뷰어 열기)와 파일 백업이 필요하다
 	exporter->ExportMesh();
+	delete exporter;
 
 	// 여기까지 실행하면 Fox.mesh, Fox.mats 파일 저장
 	// -> 모델 렌더 씬에서 해당 파일을 다시 읽으면 모델 출력
 
+
+	// 샘플 코드
+
+	string clipName;
+	clipName = "Fox_Run";
+	string clipPath;
+	clipPath = "Models/Animations/" + modelName + "/" + clipName + ".fbx";
+
+	exporter = new ModelExporter(modelName, clipPath);
+	exporter->ExportClip(clipName);
+	delete exporter;
 }
 
 ModelExportScene::~ModelExportScene()

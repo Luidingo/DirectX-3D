@@ -410,13 +410,186 @@ void ModelExporter::WriteMesh()
 
 Clip* ModelExporter::ReadClip(aiAnimation* animation)
 {
-	return nullptr;
+	Clip* clip = new Clip(); // 변수 생성
+
+	// 원본에서 데이터 받아와서 대입하기
+	clip->name = animation->mName.C_Str();
+	clip->tickPerSecond = (float)animation->mTicksPerSecond;
+	clip->frameCount = (UINT)(animation->mDuration) + 1; // 0이 첫 프레임이므로
+
+	vector<ClipNode> clipNodes;
+	clipNodes.reserve(animation->mNumChannels);
+	FOR(animation->mNumChannels)
+	{
+		aiNodeAnim* srcNode = animation->mChannels[i]; // 원본의 i번째 노드 받기
+
+		ClipNode node;
+		node.name = srcNode->mNodeName; // 원본으로 받은 부분 부위의 이름
+		
+		// 노드 내 지정된 트랜스폼 지정 목록 중에서 가장 많은 수(위치, 회전, 크기)를 키의 총 수로 간주
+		UINT keyCount = max(srcNode->mNumPositionKeys, srcNode->mNumRotationKeys);
+		keyCount = max(keyCount, srcNode->mNumScalingKeys);
+
+		node.transforms.reserve(clip->frameCount); // 클립의 프레임 수만큼 노드 예약
+
+		KeyTransform transform;
+		for (UINT k = 0; k < keyCount; ++k) // 위에서 도출한 가장 많은 키 숫자만큼 반복
+		{
+			bool isFound = false; // 조건에 맞는 정보가 있었는지 여부 초기화
+			float t = node.transforms.size();
+
+			if (k < srcNode->mNumPositionKeys // k가 아직 위치의 목록을 안 벗어났고
+				&& NearlyEqual((float)srcNode->mPositionKeys[k].mTime, t))
+				// 지정된 위치 정보가 역시 노드의 목록 범위 안이라면
+			{
+				aiVectorKey key = srcNode->mPositionKeys[k]; // ai식 벡터로 위치 정보 받기
+				// ai식 벡터로 존재하던 원본 노드의 데이터를 작업 중인 트랜스폼에 따오기
+				memcpy_s(&transform.pos, sizeof(Float3), &key.mValue, sizeof(aiVector3D));
+
+				// 어쨌든 조건에 맞는 정보가 있었다고 체크
+				isFound = true;
+			}
+
+			// 위와 비슷한 계산을 회전, 크기에도 적용
+
+			if (k < srcNode->mNumRotationKeys
+				&& NearlyEqual((float)srcNode->mRotationKeys[k].mTime, t))
+			{
+				aiQuatKey key = srcNode->mRotationKeys[k];
+				transform.rot.x = (float)key.mValue.x;
+				transform.rot.y = (float)key.mValue.y;
+				transform.rot.z = (float)key.mValue.z;
+				transform.rot.w = (float)key.mValue.w;
+
+				isFound = true;
+			}
+
+			if (k < srcNode->mNumScalingKeys
+				&& NearlyEqual((float)srcNode->mScalingKeys[k].mTime, t))
+			{
+				aiVectorKey key = srcNode->mScalingKeys[k];
+				memcpy_s(&transform.scale, sizeof(Float3), &key.mValue, sizeof(aiVector3D));
+
+				isFound = true;
+			}
+
+			if (isFound) // 만약 조건에 맞는 정보가 있었다면...
+			{
+				// 어쨌든 부분적으로라도 (혹은 완전히) 트랜스폼 정보를 가진 키 프레임의 모델이
+				// 발견이 된 것
+				// 그러므로 벡터에 넣는다
+				node.transforms.push_back(transform);
+			}
+		}
+
+		// 여기까지 오면서 반복문을 마치면 조금이라도 시점에 따른 트랜스폼 변화 목록이 있는 노드는
+		// 모조리 긁어서 벡터로 만들게 된다
+
+		// 이 벡터를 클립에서 기록된 전체 프레임 수와 다시 비교를 한다
+		if (node.transforms.size() < clip->frameCount) // 그렇게 긁어와도 모자라면
+		{
+			UINT count = clip->frameCount - node.transforms.size(); // 차이를 낸다
+			KeyTransform keyTransform = node.transforms.back(); // 위에서 찾은 (키)트랜스폼 목록의 마지막 요소를 복제
+
+			for (int d = 0; d < count; d++) // 차이만큼 
+				node.transforms.push_back(keyTransform); // 노드 벡터에 복제된 키 트랜스폼을 추가
+		}
+
+		// 키 트랜스폼이 모인 노드를 동작이 있는 노드의 벡터에 추가
+		clipNodes.push_back(node);
+	}
+	// 여기서 시점별로 움직임이 달라져야 할 트랜스폼의 목록 = 키 트랜스폼과 그 노드의 목록이 나온다
+	
+	// 지금 나온 노드를 원본 삼아서 키 프레임(시점별 자세)을 읽는다
+
+	ReadKeyFrame(clip, scene->mRootNode, clipNodes);
+	// clipNode를 참고하여, mRootNode로부터, clip의 키 프레임을 실제로 불러온다
+
+	// 여기까지 오면 (오류가 안 났으면) clip이 만들어진다
+
+	return clip;
 }
 
 void ModelExporter::ReadKeyFrame(Clip* clip, aiNode* node, vector<ClipNode>& clipNodes)
 {
+	KeyFrame* keyFrame = new KeyFrame();
+	keyFrame->boneName = node->mName.C_Str();
+	keyFrame->transforms.reserve(clip->frameCount); // 프레임 수만큼 자리 예약
+
+	FOR(clip->frameCount)
+	{
+		ClipNode* clipNode = nullptr;		// 작업할 클립 내 노드 준비
+		for (ClipNode& tmp : clipNodes)		// 매개변수로 받은 노드 벡터 검사
+		{
+			if (tmp.name == node->mName)	// 매개변수로 받은(읽을) 노드와 이름이 같은 곳이 있으면
+			{ 
+				clipNode = &tmp;			// 그곳이 작업할 곳(포인터)이다
+				break;						// 검사 종료
+			}
+		}
+
+		KeyTransform keyTransform;
+		if (clipNode == nullptr) // 받은 노드 정보가 없었으면
+		{
+			Matrix transform(node->mTransformation[0]); // 원본에서 다시 만든다(루트 기준)
+														// 이 경우 원본 행렬이 원점 기준으로 딱 맞춰지지 않을 경우를 대비해서
+			transform = XMMatrixTranspose(transform);	// DX 규격 기준으로 행렬 요소를 분해 -> 재구성
+
+			// 벡터 요소 준비
+			Vector3 S;
+			Vector3 R;
+			Vector3 T;
+			// DX 규격에 맞춰져서 정리된 행렬을 다시 분해해서 벡터를 추출한다
+			XMMatrixDecompose(S.GetValue(), R.GetValue(), T.GetValue(), transform);
+					// 매개변수 : 결과 크기 값, 결과 회전 값, 결과 위치(전이) 값, 원본
+
+			// 벡터를 구조체에 적용
+			keyTransform.scale = S;
+			XMStoreFloat4(&keyTransform.rot, R);
+			keyTransform.pos = T;
+
+			// 이렇게 원본 기준으로 트랜스폼을 만들어서라도 프레임을 담아 갈 준비를 한다
+		}
+		else // 트랜스폼이 있는 경우
+		{
+			keyTransform = clipNode->transforms[i]; // 원본을 통해 추출한 노드 정보의, i번째 트랜스폼
+		}
+
+		keyFrame->transforms.push_back(keyTransform); // 벡터에 추가
+	}
+	// 여기까지 만든, 트랜스폼(노드 정보)을 모아 만든 키 프레임(모델의 자세)을
+	// 움직임을 위한 벡터에 넣는다 (부위를 모아 모델, 부위의 정보를 모아 자세, 시간별 자세를 모으면 움직임)
+	clip->keyFrame.push_back(keyFrame);
+
+	FOR(node->mNumChildren) // 이 노드에 자식 노드가 있었으면...
+		ReadKeyFrame(clip, node->mChildren[i], clipNodes);
+		// 자식 노드를 상대로 똑같은 과정을 반복 (자식이 남지 않을 때까지)
 }
 
 void ModelExporter::WriteClip(Clip* clip, string clipName, UINT index)
 {
+	// 클립을 먼저 다 읽은 다음, 파일로 저장하기
+
+	string file = "Models/Clips/" + name + "/" + clipName + to_string(index) + ".clip";
+
+	CreateFolders(file);
+
+	BinaryWriter* writer = new BinaryWriter(file);
+
+	writer->String(clip->name); // 어떤 동작인가
+	writer->UInt(clip->frameCount); // 얼마나 데이터가 있는가
+	writer->Float(clip->tickPerSecond); // 기본 재생 속도(초당 프레임 갱신량)는 얼마인가
+
+	writer->UInt(clip->keyFrame.size());
+	for (KeyFrame* keyFrame : clip->keyFrame)
+	{
+		writer->String(keyFrame->boneName);
+		writer->UInt(keyFrame->transforms.size());
+		writer->Byte(keyFrame->transforms.data(), sizeof(KeyTransform) * keyFrame->transforms.size());
+
+		delete keyFrame;
+	}
+
+	delete clip;
+	delete writer;
 }

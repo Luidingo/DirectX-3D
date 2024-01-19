@@ -190,6 +190,7 @@
     <ClInclude Include="Framework\Model\ModelExporter.h" />
     <ClInclude Include="Framework\Model\ModelClip.h" />
     <ClInclude Include="Framework\Model\ModelAnimator.h" />
+    <ClInclude Include="Scenes\ModelAnimationScene.h" />
     <ClInclude Include="Scenes\ModelExportScene.h" />
     <ClInclude Include="Scenes\ModelRenderScene.h" />
     <ClInclude Include="Objects\Basic\Cube.h" />
@@ -258,6 +259,7 @@
     <ClCompile Include="Framework\Model\ModelExporter.cpp" />
     <ClCompile Include="Framework\Model\ModelClip.cpp" />
     <ClCompile Include="Framework\Model\ModelAnimator.cpp" />
+    <ClCompile Include="Scenes\ModelAnimationScene.cpp" />
     <ClCompile Include="Scenes\ModelExportScene.cpp" />
     <ClCompile Include="Scenes\ModelRenderScene.cpp" />
     <ClCompile Include="Objects\Basic\Cube.cpp" />
