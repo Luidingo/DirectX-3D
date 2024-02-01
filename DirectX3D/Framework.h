@@ -167,6 +167,9 @@ using namespace GameMath;
 #include "Objects/Algorithm/Heap.h"
 #include "Objects/Algorithm/AStar.h"
 
+#include "Objects/Particle/Particle.h"
+#include "Objects/Particle/Spark.h"
+
 #include "Objects/Character/Human.h"
 #include "Objects/Character/Robot.h"
 #include "Objects/Character/Naruto.h"
