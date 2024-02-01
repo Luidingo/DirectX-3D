@@ -88,6 +88,10 @@ public:
     Vector3 Picking();
     bool ComputePicking(Vector3& pos);
 
+    UINT GetWidth() { return width; }
+    float GetHeight(const Vector3& pos, Vector3* normal = nullptr);
+    Vector2 GetSize() { return Vector2(width, height); }
+
 private:
     void MakeMesh();
     void MakeNormal();

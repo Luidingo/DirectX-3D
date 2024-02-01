@@ -19,10 +19,29 @@ AStar::~AStar()
 
 void AStar::Update()
 {
+    if (KEY_PRESS(VK_LSHIFT)) // 시프트 키를 누른 상태라면
+    {
+        if (KEY_DOWN(VK_RBUTTON)) // 우클릭
+        {
+            Ray ray = CAM->ScreenPointToRay(mousePos);
+
+            for (Node* node : nodes)
+            {
+                if (node->IsRayCollision(ray, nullptr))
+                {
+                    node->SetState(Node::OBSTACLE); // 장애물로 설정
+                    AddObstacle(node); // 장애물 목록에도 등록하기
+                    break; // 반복 종료
+                }
+            }
+        }
+    }
 }
 
 void AStar::Render()
 {
+    for (Node* node : nodes)
+        node->Render(); // 노드에 충돌체 설정이 켜져 있으면 렌더
 }
 
 void AStar::SetNode(Terrain* terrain)
@@ -151,17 +170,109 @@ void AStar::GetPath(IN int start, IN int end, OUT vector<Vector3>& path)
     while (curIndex != start) // 인덱스가 출발지로 돌아올 때까지
     {
         nodes[curIndex]->state = Node::USING; // 경로로 사용됨
-        path.push_back(nodes[curIndex]->GlobalPos());
+        path.push_back(nodes[curIndex]->GlobalPos()); // 노드들의 위치를 경로 벡터에 추가
+        curIndex = nodes[curIndex]->via;    // 선택했던 노드의 경유지로 넘어가서 경로 추가 계속
+                                            // -> 경로 탐색 과정에서 경유지 설정까지 한다는 뜻
     }
+
+    // 아래 코드는 원형 알고리즘(다익스트라)의 잔재이지만 쓰진 않는다
+    // 이유 1. 노드 내 계산이라서
+    // 이유 2. 현재 이 알고리즘을 쓸 캐릭터가 3D에 있어서
+    //        = 경로가 복잡하면 몰라도, 아주 간단할 때는 굳이 경로를 계산할 필요가 없다
+    //          Pos()주고 직선으로 가게 시키면 그만  
+    // path.push_back(nodes[start]->GlobalPos());
 }
 
 void AStar::MakeDirectionPath(IN Vector3 start, IN Vector3 end, OUT vector<Vector3>& path)
 {
+    // 방향 경로 지정
+    // 이 함수가 진짜 하는 일은 따로 있지만, 간접적으로 추가 정보를 하나 더 얻을 수 있음
+
+    // 도출된 경로, 혹은 도출 중인 경로에서 목적지까지 직선 거리를 내었다고 가정할 때
+    // 해당 방향에서 발생한 "장애물로 인한 이동 불가능 경로"의 거리를 내기 위해 작성
+    // -> 이 계산을 통해서 다음 두 가지 중 하나의 정보를 얻을 수 있다
+    // 1. 장애물 경로
+    // 2. (1에서 간접 도출) 어디서 어디까지가 장애물을 안 보고 가는가
+
+    // 자를 인덱스 준비
+    int cutNodeNum = 0;
+
+    Ray ray;
+    ray.pos = start; // 광원을 출발지로 일단 지정
+
+    FOR(path.size()) // 경로를 검사해서
+    {
+        if (!IsCollisionObstacle(start, path[i])) // 장애물을 해당 경로의 i번째까지 안 봤다면
+        {
+            cutNodeNum = path.size() - i - 1;
+            break;
+            
+            // -> 장애물이 없으면 자를 게 없음
+            // -> 장애물이 처음부터 있었으면 다 자름
+        }
+    }
+
+    // 위 반복문에서 찾아낸 cutNodeNum을 이용해서 장애물에 해당되는 노드를 지워버린다
+    // 만약 위 조건문이 참을 가리키는 것이었으면 장애물을 안 만난다는 노드를 자른다
+
+    FOR(cutNodeNum) // 등록된 잘라야 할 인덱스의 개수만큼
+    {
+        path.pop_back(); // 경로를 자른다 (뒤에서부터)
+    }
+
+    // 같은 계산을 끝나는 지점에서도 다시 진행한다
+    cutNodeNum = 0;
+    ray.pos = end; // 광원은 이제 종점
+
+    FOR(path.size()) // 여기까지 계산에서 줄어들었을지도 모르는 경로 개수만큼 다시 반복
+    {
+        if (!IsCollisionObstacle(end, path[path.size() - i - 1])) // 벡터의 뒤에서부터 검사
+        {
+            cutNodeNum = path.size() - i - 1;
+            break;
+        }
+    }
+
+    FOR(cutNodeNum)
+    {
+        path.erase(path.begin()); // 앞에서부터 또 경로 지우기
+    }
+
+    // 여기까지 오면
+    // 위 반복문 중 조건문의 참(장애물에 부딪침)이면 -> 장애물에 안 부딪친 노드를 삭제
+    // 조건이 거짓이면 -> 장애물에 부딪친 만큼의 노드를 삭제
+
+    // 어느 쪽이든 (장애물을 만난 경로든, 장애물을 안 만난 경로든) 그 결과를
+    // 이후 최초의 경로와 대조하면 두 가지 정보를 모두 얻을 수 있다
+
+    // -> 다른 경로 연산에서 우선적으로 쓸 결과가 무엇이냐에 따라 조건 설정을 선택
 }
 
 bool AStar::IsCollisionObstacle(Vector3 start, Vector3 end)
 {
-    return false;
+    // 장애물 판정을 충돌로 진행
+
+    // 광선 준비
+    Ray ray(start, (end - start).GetNormalized());
+    // 광원은 시작 지점, 방향은 시작에서 끝으로 가는 방향
+
+    float distance = Distance(start, end); // 시작에서 끝까지의 거리
+
+    Contact contact; // 접점 정보
+
+    for (Collider* obstacle : obstacles) // 등록된 장애물을 처음부터 검사해서
+    {
+        if (obstacle->IsRayCollision(ray, &contact)) // 광선이 장애물에 부딪쳤다면
+        {
+            // 접점과 광선의 거리를 또 내어보고
+            if (contact.distance < distance) // 광원과 접점까지의 거리가 두 위치 사이 거리보다 짧으면
+            {
+                return true; // 직선으로 가는 도중에 장애물을 만났다는 이야기가 된다
+            }
+        }
+    }
+    // 반복문 끝날 때까지 그런 충돌이 없었으면 
+    return false; // 아무런 일도 없었다
 }
 
 void AStar::AddObstacle(Collider* collider)
@@ -204,15 +315,78 @@ void AStar::SetEdge()
 
 int AStar::GetMinNode()
 {
-    return 0;
+    return heap->DeleteRoot()->index;
+
+    // 최소 비용 노드를 얻어야 하는데
+    // 힙에서 이미 벡터를 최소 비용 순으로 정렬을 항상 하고 있다
+    // -> 그러므로 힙 속 벡터의 0번 인덱스를 받으면 될 것이다
+
+    // -> 그래서 힙의 루트(0번 인덱스)를 받아서 해당 노드의 인덱스를 제시
 }
 
 void AStar::Extend(int center, int end)
 {
+    // 최소 이동비용이 예상되는 인접 노드로 넘어가서, 다시 여기서 다음 경로를 찾는 함수
+
+    for (Node::Edge* edge : nodes[center]->edges) // 매개변수로 받은 센터의 인접지 검사
+    {
+        int index = edge->index;
+
+        if (nodes[index]->state == Node::CLOSED) continue;      // 노드가 계산이 끝난 상태면 제치기
+        if (nodes[index]->state == Node::OBSTACLE) continue;    // 장애물 그 자체여도 제치기
+        
+        // 현재 검색 중인 노드의 지형과 휴리스틱 다시 계산
+        // -> 이 과정에서 각 노드의 G와 H 계산 가능
+
+        float _g = nodes[center]->g + edge->cost;
+        float _h = GetDiagonalManhattanDistance(index, end);
+
+        float _f = _g + _h;
+
+        if (nodes[index]->state == Node::OPEN) // 노드가 현재 연산 중이라면
+        {
+            if (_f < nodes[index]->f) // 이동 비용을 비교하고 최소 기록을 갱신하면
+            {
+                // 해당 노드의 데이터를 반영한다
+                nodes[index]->g = _g; // 지형 갱신
+                nodes[index]->f = _f; // 최종비용 갱신
+                nodes[index]->via = center; // 이 노드의 경유지를 현재 노드로
+            }
+            // 이렇게 반복문을 진행하면 센터에서 각 "최소 비용 후보지"로 가는 곳을 다음 갈 곳으로 잠정 가능
+        }
+        else if (nodes[index]->state == Node::NONE) // 연산에 쓰인 적이 없다면
+        {
+            // 노드를 지금 열어서 연산에 추가
+            nodes[index]->g = _g;
+            nodes[index]->h = _h;
+            nodes[index]->f = _f;
+            nodes[index]->via = center;
+            nodes[index]->state = Node::OPEN;
+
+            // 힙에 바로 추가해서 이동비용에 따른 정렬까지 진행
+            heap->Insert(nodes[index]);
+
+            // 그럼 이 노드도 트리 안에서 정렬이 끝나, 최소 비용인지 아닌지, 트리 내 어디로 갈 건지
+            // 정렬로 결과를 낼 수 있다
+        }
+    }
+
+    // 여기까지 진행되면 센터에서 목적지로 가는 최소 비용 노드의 후보지가 나오게 된다
+    // -> 다음에 해당 노드로 진행 가능 (확장 진행)
 }
 
 void AStar::Reset()
 {
+    // 진행했던 최단 경로 도출 연산 결과를 지우기
+
+    for (Node* node : nodes)
+    {
+        if (node->state != Node::OBSTACLE) // 장애물은 계속 장애물이고, 장애물이 아니라면
+        {
+            node->state = Node::NONE; // 계산 이전 상태로 되돌리기
+        }
+    }
+    heap->Clear(); // 힙 벡터도 모두 지우기
 }
 
 float AStar::GetManhattanDistance(int start, int end)

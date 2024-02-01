@@ -3,8 +3,11 @@
 class AStar
 {
     // A* 알고리즘 : 실제 길 찾기에 활용될 주 정렬-검색 알고리즘
-public:
+private:
+    typedef Terrain LevelData;
+    //typedef TerrainEditor LevelData;
 
+public:
     AStar(UINT width = 10, UINT height = 10); //규격을 받으면서 생성
     ~AStar();
 
@@ -12,10 +15,10 @@ public:
     void Render();
 
     void SetNode(){} // 기본형 (지형을 보지 않는 노드 설치) - 비워두기
-    void SetNode(class Terrain* terrain); //지형을 당겨 받아 노드 설치 (지형 대응 함수) - 작성대상
-                                          //왜 지형을 쓰려고 하느냐? -> 게임에서 쓸 생각이니까
-                                          //왜 class냐? -> 지형도 씬에서 길찾기를 써야 하니까
-                                          //가능성과 상관없이 상호참조를 막으려고.
+    void SetNode(Terrain* terrain);     //지형을 당겨 받아 노드 설치 (지형 대응 함수) - 작성대상
+                                                //왜 지형을 쓰려고 하느냐? -> 게임에서 쓸 생각이니까
+                                                //왜 class냐? -> 지형도 씬에서 길찾기를 써야 하니까
+                                                //가능성과 상관없이 상호참조를 막으려고.
 
     int FindCloseNode(Vector3 pos); //지정받은 좌표에 따른 정확한 노드 출력
     int FindRandomPos(Vector3 pos, float range); //랜덤노드 출력

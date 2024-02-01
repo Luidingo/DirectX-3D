@@ -22,13 +22,49 @@
       <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\ComputePicking.cso</FullPath>
     </ContentFile>
     <ContentFile>
+      <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\Particle.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\Billboard.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\Rain.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\Snow.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\Spark.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\Sprite.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\Skybox.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
       <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\Terrain.cso</FullPath>
     </ContentFile>
     <ContentFile>
       <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\TerrainEditor.cso</FullPath>
     </ContentFile>
     <ContentFile>
+      <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\AnimGBuffer.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\Deferred.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\DepthMap.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\GBuffer.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
       <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\Light.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\Shadow.cso</FullPath>
     </ContentFile>
     <ContentFile>
       <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\ModelAnimation.cso</FullPath>
@@ -38,6 +74,15 @@
     </ContentFile>
     <ContentFile>
       <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\ModelInstancing.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\Bloom.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\Fog.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\ProgressBar.cso</FullPath>
     </ContentFile>
   </ContentFiles>
   <SatelliteDlls />

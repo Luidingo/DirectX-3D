@@ -142,6 +142,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Scenes\AStarScene.h" />
+    <ClInclude Include="Objects\Character\FoxA.h" />
     <ClInclude Include="Objects\Algorithm\AStar.h" />
     <ClInclude Include="Objects\Algorithm\Heap.h" />
     <ClInclude Include="Objects\Algorithm\Node.h" />
@@ -151,6 +153,8 @@
     <ClInclude Include="Objects\Algorithm\DNode.h" />
     <ClInclude Include="Framework\Render\DepthStencil.h" />
     <ClInclude Include="Framework\Render\RenderTarget.h" />
+    <ClInclude Include="Scenes\InstancingAScene.h" />
+    <ClInclude Include="Scenes\InstancingMScene.h" />
     <ClInclude Include="Scenes\RenderTargetScene.h" />
     <ClInclude Include="Scenes\BillboardScene.h" />
     <ClInclude Include="DirectX3D.h" />
@@ -241,6 +245,8 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Scenes\AStarScene.cpp" />
+    <ClCompile Include="Objects\Character\FoxA.cpp" />
     <ClCompile Include="Objects\Algorithm\AStar.cpp" />
     <ClCompile Include="Objects\Algorithm\Heap.cpp" />
     <ClCompile Include="Objects\Algorithm\Node.cpp" />
@@ -250,6 +256,8 @@
     <ClCompile Include="Objects\Algorithm\DNode.cpp" />
     <ClCompile Include="Framework\Render\DepthStencil.cpp" />
     <ClCompile Include="Framework\Render\RenderTarget.cpp" />
+    <ClCompile Include="Scenes\InstancingAScene.cpp" />
+    <ClCompile Include="Scenes\InstancingMScene.cpp" />
     <ClCompile Include="Scenes\RenderTargetScene.cpp" />
     <ClCompile Include="Scenes\BillboardScene.cpp" />
     <ClCompile Include="DirectX3D.cpp" />

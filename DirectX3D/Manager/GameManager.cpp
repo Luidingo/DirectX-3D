@@ -14,6 +14,7 @@
 #include "Scenes/RenderTargetScene.h"
 #include "Scenes/ShadowScene.h"
 #include "Scenes/DijkstraScene.h"
+#include "Scenes/AStarScene.h"
 
 // 오늘의 과제 : 이론 추가 조사
 
@@ -43,7 +44,8 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("BillboardScene", new BillboardScene());
     //SceneManager::Get()->Create("RenderTarget", new RenderTargetScene());
     //SceneManager::Get()->Create("ShadowScene", new ShadowScene());
-    SceneManager::Get()->Create("Dijkstra", new DijkstraScene());
+    //SceneManager::Get()->Create("Dijkstra", new DijkstraScene());
+    SceneManager::Get()->Create("AStar", new AStarScene());
 
     SceneManager::Get()->Add("Grid");
     //SceneManager::Get()->Add("ModelExport");
@@ -53,7 +55,8 @@ GameManager::GameManager()
     //SceneManager::Get()->Add("BillboardScene");
     //SceneManager::Get()->Add("RenderTarget");
     //SceneManager::Get()->Add("ShadowScene");
-    SceneManager::Get()->Add("Dijkstra");
+    //SceneManager::Get()->Add("Dijkstra");
+    SceneManager::Get()->Add("AStar");
 }
 
 GameManager::~GameManager()

@@ -171,6 +171,7 @@ using namespace GameMath;
 #include "Objects/Character/Robot.h"
 #include "Objects/Character/Naruto.h"
 #include "Objects/Character/FoxD.h"
+#include "Objects/Character/FoxA.h"
 
 #include "Objects/Manager/BlockManager.h"
 #include "Objects/Manager/KunaiManager.h"
