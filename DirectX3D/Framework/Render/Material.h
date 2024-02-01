@@ -47,7 +47,9 @@ public:
     void SetShader(wstring shaderFile);
     void SetDiffuseMap(wstring textureFile);
     void SetSpecularMap(wstring textureFile);
-    void SetNormalMap(wstring textureFile);
+    void SetNormalMap(wstring textureFile); 
+
+    void SetDiffuseMap(Texture* texture) { diffuseMap = texture; }
 
     Texture* GetDiffuseMap() { return diffuseMap; }
     Texture* GetSpecularMap() { return specularMap; }

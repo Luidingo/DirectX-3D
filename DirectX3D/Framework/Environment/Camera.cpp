@@ -29,7 +29,10 @@ void Camera::Update()
     else
         FreeMode();
 
-    SetView();
+    UpdateWorld();
+
+    view = XMMatrixInverse(nullptr, world);
+    viewBuffer->Set(view, world);
 }
 
 void Camera::GUIRender()
@@ -73,23 +76,30 @@ void Camera::GUIRender()
 }
 
 void Camera::SetView()
-{
-    UpdateWorld();
-
-    view = XMMatrixInverse(nullptr, world);
-
-    viewBuffer->Set(view, world);
+{  
     viewBuffer->SetVS(1);
+    viewBuffer->SetPS(1);
 }
 
-Vector3 Camera::ScreenToWorld(Vector3 pos)
+Vector3 Camera::ScreenToWorld(Vector3 screenPos)
 {
-    return XMVector3TransformCoord(pos, world);
+    return XMVector3TransformCoord(screenPos, world);
 }
 
-Vector3 Camera::WorldToScreen(Vector3 pos)
+Vector3 Camera::WorldToScreen(Vector3 worldPos)
 {
-    return XMVector3TransformCoord(pos, view);
+    Vector3 screenPos;
+
+    screenPos = XMVector3TransformCoord(worldPos, view);
+    screenPos = XMVector3TransformCoord(screenPos, projection);
+    //NDC : -1 ~ 1
+
+    screenPos = (screenPos + Vector3::One()) * 0.5f;//0~1
+
+    screenPos.x *= WIN_WIDTH;
+    screenPos.y *= WIN_HEIGHT;
+
+    return screenPos;
 }
 
 Ray Camera::ScreenPointToRay(Vector3 screenPoint)
@@ -190,7 +200,7 @@ void Camera::FollowMode()
 
 void Camera::Frustum()
 {
-    Float4x4 VP; //뷰포트 임시 변수
+    Float4x4 VP;
     XMStoreFloat4x4(&VP, view * projection);
 
     //Left
@@ -235,7 +245,6 @@ void Camera::Frustum()
     d = VP._44 - VP._43;
     planes[5] = XMVectorSet(a, b, c, d);
 
-    //면 정규화
     FOR(6)
         planes[i] = XMPlaneNormalize(planes[i]);
 }

@@ -11,7 +11,7 @@ public:
     virtual bool IsBoxCollision(BoxCollider* collider) override;
     virtual bool IsSphereCollision(SphereCollider* collider) override;
     virtual bool IsCapsuleCollision(CapsuleCollider* collider) override;
-    
+
     float Radius() { return radius * max(GlobalScale().x, max(GlobalScale().y, GlobalScale().z)); }
     float Height() { return height * GlobalScale().y; }
 

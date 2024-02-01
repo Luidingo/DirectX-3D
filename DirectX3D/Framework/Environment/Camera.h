@@ -13,8 +13,8 @@ public:
 
     void SetTarget(Transform* target) { this->target = target; }    
 
-    Vector3 ScreenToWorld(Vector3 pos);
-    Vector3 WorldToScreen(Vector3 pos);
+    Vector3 ScreenToWorld(Vector3 screenPos);
+    Vector3 WorldToScreen(Vector3 worldPos);
 
     Ray ScreenPointToRay(Vector3 screenPoint);
 
@@ -40,7 +40,7 @@ private:
     float a, b, c, d;
 
     float moveSpeed = 50.0f;
-    float rotSpeed = 5.0f;
+    float rotSpeed = 10.0f;
 
     Vector3 prevMousePos;
 

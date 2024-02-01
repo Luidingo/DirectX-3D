@@ -2,34 +2,26 @@
 
 class ActorUI
 {
-    
 public:
     ActorUI();
     ~ActorUI();
 
     void Update();
-    void Render();
-
     void PostRender();
     void GUIRender();
 
-    void Build();
     void Mining();
+    void Build();
 
 private:
-    //¸â¹ö ÇÔ¼ö
-
-private:
-    //¸â¹ö º¯¼ö
-
-    Quad* crosshair;
+    Quad* crossHair;
     Quad* quickSlot;
-    Quad* iconFrame;
+    Quad* iconFrame;    
 
     vector<Quad*> blockIcons;
     map<int, pair<int, int>> iconData;
+
     map<int, vector<Cube*>> blocks;
 
-    int selectedIconIndex = -1;
+    int selectIconIndex = -1;
 };
-

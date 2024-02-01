@@ -19,28 +19,33 @@ private:
 
 class WorldBuffer : public ConstBuffer
 {
-    // 공간 데이터를 버퍼로 만든 것
-
 private:
     struct Data
     {
-        Matrix world = XMMatrixIdentity(); // 행렬로 표현된 공간정보
+        Matrix world = XMMatrixIdentity();
+        
+        int type = 0;
 
-        int type = 0; // 공간 타입
-        float padding[3]; // 여유/지연 데이터
+        float padding[3];
     };
 
 public:
-    WorldBuffer() : ConstBuffer(&data, sizeof(Data)) {}
+    WorldBuffer() : ConstBuffer(&data, sizeof(Data))
+    {
+    }
 
-    void Set(Matrix value) { data.world = XMMatrixTranspose(value); }
-                             //매개변수에 의해 행렬 전이 (사실상의 할당)
+    void Set(Matrix value)
+    {
+        data.world = XMMatrixTranspose(value);
+    }
 
-    void SetType(int type) { data.type = type; }
+    void SetType(int type)
+    {
+        data.type = type;
+    }
 
 private:
     Data data;
-
 };
 
 class ViewBuffer : public ConstBuffer
@@ -110,14 +115,22 @@ private:
 
 class LightBuffer : public ConstBuffer
 {
-private:
+public:
     struct Light
     {
         Float4 color = { 1, 1, 1, 1 };
         Float3 direction = { 0, -1, 1 };
-        float shininess = 24.0f;
-    };
+        int type = 0;
 
+        Float3 pos = { 0, 0, 0 };
+        float range = 100.0f;
+
+        float inner = 55.0f;
+        float outer = 70.0f;
+        float length = 50.0f;
+        int active = 1;
+    };
+private:
     struct Data
     {
         Light lights[MAX_LIGHT];
@@ -130,6 +143,56 @@ private:
 
 public:
     LightBuffer() : ConstBuffer(&data, sizeof(Data))
+    {
+    }
+
+    Data& Get() { return data; }
+
+private:
+    Data data;
+};
+
+class WeatherBuffer : public ConstBuffer
+{
+private:
+    struct Data
+    {
+        Float3 velocity = { 0, -1, 0 };
+        float distance = 100.0f;
+
+        Float4 color = { 1, 1, 1, 1 };
+
+        Float3 origin = {};
+        float time = 0.0f;
+
+        Float3 size = { 50, 50, 50 };
+        float turbulence = 5.0f;
+    };
+public:
+    WeatherBuffer() : ConstBuffer(&data, sizeof(Data))
+    {
+    }
+
+    Data& Get() { return data; }
+
+private:
+    Data data;
+};
+
+class FogBuffer : public ConstBuffer
+{
+private:
+    struct Data
+    {        
+        Float4 color = { 1, 1, 1, 1 };
+
+        float start = 0.0f;
+        float random = 1.0f;
+
+        float padding[2];
+    };
+public:
+    FogBuffer() : ConstBuffer(&data, sizeof(Data))
     {
     }
 

@@ -25,11 +25,5 @@ LightPixelInput VS(VertexUVNormalTangentBlend input)
 
 float4 PS(LightPixelInput input) : SV_TARGET
 {
-	Material material = GetMaterial(input);
-	
-	float4 color = CalcDirectional(material, lights[0]);
-	float4 ambient = CalcAmbient(material);
-	float4 emissive = CalcEmissive(material);
-	
-	return color + ambient + emissive;
+	return CalcLights(input);
 }

@@ -39,7 +39,7 @@ void Material::Set()
     specularMap->PSSet(1);
     normalMap->PSSet(2);
 
-    buffer->SetPS(1);
+    buffer->SetPS(3);
 
     vertexShader->Set();
     pixelShader->Set();

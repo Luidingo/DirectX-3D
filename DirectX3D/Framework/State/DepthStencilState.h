@@ -9,6 +9,7 @@ public:
     void SetState();
 
     void DepthEnable(bool value);
+    void DepthWriteMask(D3D11_DEPTH_WRITE_MASK value);
 
     void Changed();
 

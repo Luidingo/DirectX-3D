@@ -7,7 +7,8 @@ Terrain::Terrain()
     //material->SetSpecularMap(L"Textures/Landscape/Fieldstone_SM.tga");
     //material->SetNormalMap(L"Textures/Landscape/Fieldstone_NM.tga");
       
-    heightMap = Texture::Add(L"Textures/HeightMaps/TestMap.png");
+    //heightMap = Texture::Add(L"Textures/HeightMaps/TestMap.png");
+    heightMap = Texture::Add(L"Textures/Color/Black.png"); // <- 가장 낮은 평지(높이 0)
     alphaMap = Texture::Add(L"Textures/AlphaMaps/TestAlphaMap.png");
     secondMap = Texture::Add(L"Textures/Landscape/Dirt.png");
     thirdMap = Texture::Add(L"Textures/Landscape/Dirt3.png");
@@ -82,6 +83,42 @@ float Terrain::GetHeight(const Vector3& pos, Vector3* normal)
         }
         return result.y;
     }
+}
+
+Vector3 Terrain::Picking()
+{
+    Ray ray = CAM->ScreenPointToRay(mousePos);
+
+    for (UINT z = 0; z < height - 1; z++)
+    {
+        for (UINT x = 0; x < width - 1; x++)
+        {
+            UINT index[4];
+            index[0] = width * z + x;
+            index[1] = width * z + x + 1;
+            index[2] = width * (z + 1) + x;
+            index[3] = width * (z + 1) + x + 1;
+
+            vector<VertexType> vertices = mesh->GetVertices();
+
+            Vector3 p[4];
+            for (UINT i = 0; i < 4; i++)
+                p[i] = vertices[index[i]].pos;
+
+            float distance = 0.0f;
+            if (Intersects(ray.pos, ray.dir, p[0], p[1], p[2], distance))
+            {
+                return ray.pos + ray.dir * distance;
+            }
+
+            if (Intersects(ray.pos, ray.dir, p[3], p[1], p[2], distance))
+            {
+                return ray.pos + ray.dir * distance;
+            }
+        }
+    }
+
+    return Vector3();
 }
 
 void Terrain::MakeNormal()

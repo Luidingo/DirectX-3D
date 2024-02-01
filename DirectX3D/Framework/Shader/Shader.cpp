@@ -55,6 +55,20 @@ ComputeShader* Shader::AddCS(wstring file)
     return (ComputeShader*)shaders[key];
 }
 
+GeometryShader* Shader::AddGS(wstring file)
+{
+    wstring key = file;
+
+    if (shaders.count(key) > 0)
+        return (GeometryShader*)shaders[key];
+
+    wstring path = L"Shaders/" + file;
+
+    shaders[key] = new GeometryShader(path);
+
+    return (GeometryShader*)shaders[key];
+}
+
 void Shader::Delete()
 {
     for (pair<wstring, Shader*> shader : shaders)

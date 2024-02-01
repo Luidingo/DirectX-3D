@@ -5,6 +5,7 @@
 cbuffer WorldBuffer : register(b0)
 {
 	matrix world;
+	int animType;
 }
 
 cbuffer ViewBuffer : register(b1)

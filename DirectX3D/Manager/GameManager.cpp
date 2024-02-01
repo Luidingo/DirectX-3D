@@ -5,41 +5,55 @@
 #include "Scenes/SphereScene.h"
 #include "Scenes/TerrainEditorScene.h"
 #include "Scenes/CollisionScene.h"
-#include "Scenes/CubeFieldScene.h"
-#include "Scenes/ModelExportScene.h" // 추출 후에 출력하므로 필수는 아니지만 익스포트 씬을 렌더 씬보다 먼저 불러옴
+#include "Scenes/ModelExportScene.h"
 #include "Scenes/ModelRenderScene.h"
 #include "Scenes/ModelAnimationScene.h"
+#include "Scenes/IntancingScene.h"
+#include "Scenes/GameScene.h"
+#include "Scenes/BillboardScene.h"
+#include "Scenes/RenderTargetScene.h"
+#include "Scenes/ShadowScene.h"
+#include "Scenes/DijkstraScene.h"
 
-// 주말의 과제
- 
-// 1. 복습 (쉬움) : 프레임워크 폴더에 있는 애니메이션 파일과 모델 데이터를 재생시켜 보기 
-//                 더불어서 조작키에 따라 (WASD, 스페이스 등) 캐릭터가 동작을 바꾸게 해보기
-//                 (예 : 달리고 점프하는 휴먼, 다른 동작을 하는 나루토 등...)
-//                 * 이 과정에서 동작만 바뀌면 됨. 이동, 점프 등은 안해도 됨
-//                 ** 다만 점프는 일정 시간(혹은 일정 조건) 하에 다른 동작(Idle 등)으로 바뀌면 좋을 것 같음
+// 오늘의 과제 : 이론 추가 조사
 
-// 2. 데이터 추출 도전 (보통, 혹은 어려움) : 애니메이션 파일을 더 구해서 직접 추출과 구현을 해보기
+// A*를 활용한 다른 길찾기 알고리즘도 있습니다. 어떤 것들이 있는지 알아봅시다
+// -> 직접 만들지는 않아도, 이후 엔진 등에서 선택해야 할 수 있습니다.
+
+// 그 중에서도 가장 대중적인 길찾기 알고리즘이 있습니다. : D* (D-스타, 다이-스타, 다이내믹 스타)
+// -> D* 가 어떤 것인지, A*와는 어떻게 다른지 알아봐주세요
+
+// -> 알아본 결과를 카페에 올려주시기 바랍니다.
 
 GameManager::GameManager()
 {
     Create();
 
     SceneManager::Get()->Create("Grid", new GridScene());
-    SceneManager::Get()->Create("ModelExport", new ModelExportScene());
+    //SceneManager::Get()->Create("ModelExport", new ModelExportScene());
 
     //SceneManager::Get()->Create("Cube", new CubeScene());
     //SceneManager::Get()->Create("Sphere", new SphereScene());
     //SceneManager::Get()->Create("Terrain", new TerrainEditorScene());
     //SceneManager::Get()->Create("Collision", new CollisionScene());
-    //SceneManager::Get()->Create("CubeField", new CubeFieldScene());
     //SceneManager::Get()->Create("ModelRender", new ModelRenderScene());
-    SceneManager::Get()->Create("ModelAnimation", new ModelAnimationScene());
+    //SceneManager::Get()->Create("ModelAnimationScene", new ModelAnimationScene());
+    //SceneManager::Get()->Create("Instancing", new IntancingScene());
+    //SceneManager::Get()->Create("Game", new GameScene());
+    //SceneManager::Get()->Create("BillboardScene", new BillboardScene());
+    //SceneManager::Get()->Create("RenderTarget", new RenderTargetScene());
+    //SceneManager::Get()->Create("ShadowScene", new ShadowScene());
+    SceneManager::Get()->Create("Dijkstra", new DijkstraScene());
 
     SceneManager::Get()->Add("Grid");
-    SceneManager::Get()->Add("ModelExport");
-
-    //SceneManager::Get()->Add("Terrain");
-    SceneManager::Get()->Add("ModelAnimation");
+    //SceneManager::Get()->Add("ModelExport");
+    //SceneManager::Get()->Add("Collision");
+    //SceneManager::Get()->Add("Instancing");
+    //SceneManager::Get()->Add("Game");
+    //SceneManager::Get()->Add("BillboardScene");
+    //SceneManager::Get()->Add("RenderTarget");
+    //SceneManager::Get()->Add("ShadowScene");
+    SceneManager::Get()->Add("Dijkstra");
 }
 
 GameManager::~GameManager()

@@ -1,39 +1,31 @@
 #include "Framework.h"
 
 TerrainEditor::TerrainEditor()
-    : GameObject(L"Light/Light.hlsl"),
+    : GameObject(L"Landscape/TerrainEditor.hlsl"),
     width(MAX_SIZE), height(MAX_SIZE)
 {
-    material->SetDiffuseMap(L"Textures/Landscape/Dirt.png");
-    secondMap = Texture::Add(L"Textures/Landscape/Dirt2.png");
+    material->SetDiffuseMap(L"Textures/Landscape/Dirt2.png");
+    secondMap = Texture::Add(L"Textures/Landscape/Dirt.png");
     thirdMap = Texture::Add(L"Textures/Landscape/Dirt3.png");
 
-    // 메시 제작 호출
     mesh = new Mesh<VertexType>();
     MakeMesh();
     MakeNormal();
     MakeTangent();
     MakeComputeData();
-    mesh->CreateMesh();
+    mesh->CreateMesh();    
 
-    //컴퓨트 셰이더 사용
     computeShader = Shader::AddCS(L"Compute/ComputePicking.hlsl");
 
-    //버퍼 생성
     brushBuffer = new BrushBuffer();
     structuredBuffer = new StructuredBuffer(
-        inputs.data(),
-        sizeof(InputDesc),
-        triangleSize,
-        sizeof(OutputDesc),
-        triangleSize);
+        inputs.data(), sizeof(InputDesc), triangleSize,
+        sizeof(OutputDesc), triangleSize);
     rayBuffer = new RayBuffer();
 
-    //경로명 받기
     char path[128];
     GetCurrentDirectoryA(128, path);
     projectPath = path;
-
 }
 
 TerrainEditor::~TerrainEditor()
@@ -41,42 +33,34 @@ TerrainEditor::~TerrainEditor()
     delete mesh;
     delete brushBuffer;
     delete rayBuffer;
-    delete structuredBuffer;
-
-
+    delete structuredBuffer;    
 }
 
 void TerrainEditor::Update()
 {
-    if (!editEnabled) return;
-
     if (ComputePicking(pickingPos))
     {
         brushBuffer->Get().pickingPos = pickingPos;
-
     }
     else
     {
-        //return;
+        return;
     }
-
-    //---------------------------------------------
-
 
     if (KEY_PRESS(VK_LBUTTON) && !ImGui::GetIO().WantCaptureMouse)
     {
         switch (editType)
         {
-        case HEIGHT:
+        case TerrainEditor::HEIGHT:
             AdjustHeight();
             break;
-        case ALPHA:
-            //관련 기능이 생기면 추가
-            break;
-        }
+        case TerrainEditor::ALPHA:
+            AdjustAlpha();
+            break;        
+        }        
     }
 
-    if (KEY_UP(VK_LBUTTON))
+    if(KEY_UP(VK_LBUTTON))
     {
         UpdateHeight();
     }
@@ -84,7 +68,7 @@ void TerrainEditor::Update()
 
 void TerrainEditor::Render()
 {
-    brushBuffer->SetPS(13);
+    brushBuffer->SetPS(10);
     secondMap->PSSet(11);
     thirdMap->PSSet(12);
 
@@ -92,75 +76,64 @@ void TerrainEditor::Render()
     mesh->Draw();
 }
 
-void TerrainEditor::RenderUI()
+void TerrainEditor::GUIRender()
 {
-    ImGui::Text("Terrain Pick Position");
-
-    ImGui::Text("X : %.1f, Y : %.1f, Z : %.1f", pickingPos.x, pickingPos.y, pickingPos.z);
-
-    ImGui::Text("Adjust : %f", adjustValue);
-
-    ImGui::Text("-------------------------");
-    ImGui::Text("Terrain Editor Options");
-
+    ImGui::Text("TerrainEdit Option");
+    //ImGui::Text("x : %.1f, y : %.1f, z : %.1f", pickingPos.x, pickingPos.y, pickingPos.z);
     if (ImGui::DragInt("Width", (int*)&width, 1.0f, 2, MAX_SIZE))
-    {
-        Resize();
-    }
-
+        Resize();    
     if (ImGui::DragInt("Height", (int*)&height, 1.0f, 2, MAX_SIZE))
-    {
         Resize();
-    }
 
-    const char* editList[] = { "HEIGHT", "ALPHA", "MAP" };
-    ImGui::Combo("EditType", (int*)&editType, editList, 3);
+    const char* editList[] = { "Height", "Alpha"};
+    ImGui::Combo("EditType", (int*)&editType, editList, 2);
 
-    const char* brushList[] = { "CIRCLE", "SOFT CIRCLE", "RECT" };
+    const char* brushList[] = { "Circle", "SoftCircle", "Rect" };
     if (ImGui::Combo("BrushType", (int*)&brushType, brushList, 3))
-    {
         brushBuffer->Get().type = brushType;
-    }
 
-    ImGui::DragFloat("Range", &brushBuffer->Get().range, 1.0f, 0.0f, 20.0f);
-    ImGui::DragFloat("AdjustLevel", &adjustValue, 1.0f, -50.0f, +50.0f);
+    ImGui::DragFloat("Range", &brushBuffer->Get().range, 1.0f, 1.0f, 20.0f);
+    ImGui::DragFloat("AdjustValue", &adjustValue, 1.0f, -50.0f, 50.0f);
     ImGui::ColorEdit3("Color", (float*)&brushBuffer->Get().color);
 
+    ImGui::DragInt("SelectMap", (int*)&selectMap, 1.0f, 0, 2);
+
     SaveHeightMap();
+    ImGui::SameLine();
     LoadHeightMap();
+
+    SaveAlphaMap();
+    ImGui::SameLine();
+    LoadAlphaMap();
 }
 
 Vector3 TerrainEditor::Picking()
 {
-    // 컴퓨트 셰이더 사용하지 않음 (레거시 코드 : CS와 같이 사용시 오류 가능)
-
     Ray ray = CAM->ScreenPointToRay(mousePos);
 
-    //그림 픽셀에 계산 시작하기
-    for (UINT z = 0; z < height - 1; ++z)
+    for (UINT z = 0; z < height - 1; z++)
     {
-        for (UINT x = 0; x < width - 1; ++x)
+        for (UINT x = 0; x < width - 1; x++)
         {
-            UINT index[4]; //순번 변수 4개 준비
-            index[0] = width * (z + 0) + (x + 0); // 0
-            index[1] = width * (z + 0) + (x + 1); // 1
-            index[2] = width * (z + 1) + (x + 0); // 2
-            index[3] = width * (z + 1) + (x + 1); // 3
+            UINT index[4];
+            index[0] = width * z + x;
+            index[1] = width * z + x + 1;
+            index[2] = width * (z + 1) + x;
+            index[3] = width * (z + 1) + x + 1;
 
-            //정점받기
             vector<VertexType> vertices = mesh->GetVertices();
 
-            Vector3 p[4]; //픽셀 4개
-            for (UINT i = 0; i < 4; ++i)
+            Vector3 p[4];
+            for (UINT i = 0; i < 4; i++)
                 p[i] = vertices[index[i]].pos;
 
-            float distance = 0; // 거리 초기화
-            if (TriangleTests::Intersects(ray.pos, ray.dir, p[0], p[1], p[2], distance))
+            float distance = 0.0f;
+            if (Intersects(ray.pos, ray.dir, p[0], p[1], p[2], distance))
             {
                 return ray.pos + ray.dir * distance;
             }
 
-            if (TriangleTests::Intersects(ray.pos, ray.dir, p[3], p[1], p[2], distance))
+            if (Intersects(ray.pos, ray.dir, p[3], p[1], p[2], distance))
             {
                 return ray.pos + ray.dir * distance;
             }
@@ -170,23 +143,9 @@ Vector3 TerrainEditor::Picking()
     return Vector3();
 }
 
-bool TerrainEditor::ComputePicking(Vector3& pos, Vector3 manualPos, Vector3 manualDir)
+bool TerrainEditor::ComputePicking(Vector3& pos)
 {
-    // 컴퓨트 셰이더 사용함
-
-    Ray ray;
-
-    if (manualDir == Vector3())
-    {
-        //마우스 위치에서 광선을 쏘는 걸로
-        ray = CAM->ScreenPointToRay(mousePos);
-    }
-    else
-    {
-        ray.pos = manualPos;
-        ray.dir = manualDir;
-    }
-
+    Ray ray = CAM->ScreenPointToRay(mousePos);
 
     rayBuffer->Get().pos = ray.pos;
     rayBuffer->Get().dir = ray.dir;
@@ -194,42 +153,37 @@ bool TerrainEditor::ComputePicking(Vector3& pos, Vector3 manualPos, Vector3 manu
 
     rayBuffer->SetCS(0);
 
-    DC->CSSetShaderResources(0, 1, &structuredBuffer->GetSRV()); 
+    DC->CSSetShaderResources(0, 1, &structuredBuffer->GetSRV());
     DC->CSSetUnorderedAccessViews(0, 1, &structuredBuffer->GetUAV(), nullptr);
 
-    // 컴퓨트 셰이더를 세팅
     computeShader->Set();
 
-    // 병렬 처리 단위 지정
     UINT x = ceil((float)triangleSize / 64.0f);
+
     DC->Dispatch(x, 1, 1);
 
-    //구조화된 버퍼에 입력에 대한 출력 결과 예약
     structuredBuffer->Copy(outputs.data(), sizeof(OutputDesc) * triangleSize);
 
     float minDistance = FLT_MAX;
-    int minIndex = -1;          
+    int minIndex = -1;
 
     UINT index = 0;
-
     for (OutputDesc output : outputs)
     {
-        if (output.isPicked)
+        if (output.picked)
         {
             if (minDistance > output.distance)
             {
                 minDistance = output.distance;
-                minIndex = index;             
+                minIndex = index;
             }
         }
-
         index++;
     }
 
     if (minIndex >= 0)
     {
         pos = ray.pos + ray.dir * minDistance;
-
         return true;
     }
 
@@ -246,17 +200,17 @@ void TerrainEditor::MakeMesh()
         height = (UINT)heightMap->GetSize().y;
 
         heightMap->ReadPixels(pixels);
-    }
+    }    
 
-    vector<VertexType>& vertices = mesh->GetVertices();
+    //Vertices
+    vector<VertexType>& vertices = mesh->GetVertices(); 
     vertices.clear();
-    vertices.reserve(width * height);
 
-    for (UINT z = 0; z < height; ++z)
+    vertices.reserve(width * height);
+    for (UINT z = 0; z < height; z++)
     {
-        for (UINT x = 0; x < width; ++x)
+        for (UINT x = 0; x < width; x++)
         {
-            //현재 픽셀 위치를 정점 및 UV에 대입
             VertexType vertex;
             vertex.pos = { (float)x, 0.0f, (float)(height - z - 1) };
             vertex.uv.x = x / (float)(width - 1);
@@ -265,28 +219,27 @@ void TerrainEditor::MakeMesh()
             UINT index = width * z + x;
             vertex.pos.y = pixels[index].x * MAX_HEIGHT;
 
-            //정점을 벡터에
             vertices.push_back(vertex);
         }
     }
 
-
-    // 인덱스
+    //Indices
     vector<UINT>& indices = mesh->GetIndices();
     indices.clear();
+
     indices.reserve((width - 1) * (height - 1) * 6);
 
-    for (UINT z = 0; z < height - 1; ++z)
+    for (UINT z = 0; z < height - 1; z++)
     {
-        for (UINT x = 0; x < width - 1; ++x)
+        for (UINT x = 0; x < width - 1; x++)
         {
-            indices.push_back(width * (z + 0) + (x + 0)); // 0
-            indices.push_back(width * (z + 0) + (x + 1)); // 1
-            indices.push_back(width * (z + 1) + (x + 0)); // 2
+            indices.push_back(width * z + x);//0
+            indices.push_back(width * z + x + 1);//1
+            indices.push_back(width * (z + 1) + x);//2            
 
-            indices.push_back(width * (z + 1) + (x + 0)); // 2
-            indices.push_back(width * (z + 0) + (x + 1)); // 1
-            indices.push_back(width * (z + 1) + (x + 1)); // 3
+            indices.push_back(width * (z + 1) + x);//2
+            indices.push_back(width * z + x + 1);//1            
+            indices.push_back(width * (z + 1) + x + 1);//3
         }
     }
 }
@@ -296,7 +249,7 @@ void TerrainEditor::MakeNormal()
     vector<VertexType>& vertices = mesh->GetVertices();
     vector<UINT> indices = mesh->GetIndices();
 
-    for (UINT i = 0; i < indices.size() / 3; ++i)
+    for (UINT i = 0; i < indices.size() / 3; i++)
     {
         UINT index0 = indices[i * 3 + 0];
         UINT index1 = indices[i * 3 + 1];
@@ -322,7 +275,7 @@ void TerrainEditor::MakeTangent()
     vector<VertexType>& vertices = mesh->GetVertices();
     vector<UINT> indices = mesh->GetIndices();
 
-    for (UINT i = 0; i < indices.size() / 3; ++i)
+    for (UINT i = 0; i < indices.size() / 3; i++)
     {
         UINT index0 = indices[i * 3 + 0];
         UINT index1 = indices[i * 3 + 1];
@@ -344,30 +297,26 @@ void TerrainEditor::MakeTangent()
         float u2 = uv2.x - uv0.x;
         float v2 = uv2.y - uv0.y;
 
-        float d = 1.0f / (u1 * v2 - u2 * v1);
+        float d = 1.0f / (u1 * v2 - v1 * u2);
         Vector3 tangent = d * (e0 * v2 - e1 * v1);
 
-        vertices[index0].tangent = tangent + vertices[index0].tangent;
-        vertices[index1].tangent = tangent + vertices[index1].tangent;
-        vertices[index2].tangent = tangent + vertices[index2].tangent;
+        vertices[index0].tangent += tangent;
+        vertices[index1].tangent += tangent;
+        vertices[index2].tangent += tangent;
     }
 }
 
 void TerrainEditor::MakeComputeData()
 {
-    // 모양 데이터 받기
     vector<VertexType> vertices = mesh->GetVertices();
-    vector<UINT> indices = mesh->GetIndices();
+    vector<UINT> indices = mesh->GetIndices();    
 
-    // 삼각형의 크기 구하기
     triangleSize = indices.size() / 3;
 
-    // 벡터 초기화
     inputs.resize(triangleSize);
     outputs.resize(triangleSize);
 
-    //각 벡터의 내용을 갱신
-    for (UINT i = 0; i < triangleSize; ++i)
+    for (UINT i = 0; i < triangleSize; i++)
     {
         UINT index0 = indices[i * 3 + 0];
         UINT index1 = indices[i * 3 + 1];
@@ -376,7 +325,7 @@ void TerrainEditor::MakeComputeData()
         inputs[i].v0 = vertices[index0].pos;
         inputs[i].v1 = vertices[index1].pos;
         inputs[i].v2 = vertices[index2].pos;
-    }
+    }    
 }
 
 void TerrainEditor::Resize()
@@ -388,17 +337,15 @@ void TerrainEditor::Resize()
 
     mesh->UpdateVertex();
     mesh->UpdateIndex();
-
     structuredBuffer->UpdateInput(inputs.data());
 }
 
 void TerrainEditor::UpdateHeight()
 {
     vector<VertexType>& vertices = mesh->GetVertices();
-
     for (VertexType& vertex : vertices)
     {
-        vertex.normal = {}; 
+        vertex.normal = {};
         vertex.tangent = {};
     }
 
@@ -406,22 +353,21 @@ void TerrainEditor::UpdateHeight()
     MakeTangent();
     MakeComputeData();
 
-    mesh->UpdateVertex();
+    mesh->UpdateVertex();    
     structuredBuffer->UpdateInput(inputs.data());
 }
 
 void TerrainEditor::AdjustHeight()
 {
-    // 정점 받기
     vector<VertexType>& vertices = mesh->GetVertices();
 
     switch (brushType)
     {
-    case CIRCLE:
+    case TerrainEditor::CIRCLE:
         for (VertexType& vertex : vertices)
         {
             Vector3 pos = Vector3(vertex.pos.x, 0, vertex.pos.z);
-            pickingPos.y = 0;
+            pickingPos.y = 0.0f;
 
             float distance = Distance(pos, pickingPos);
 
@@ -432,29 +378,26 @@ void TerrainEditor::AdjustHeight()
             }
         }
         break;
-
-    case SOFT_CIRCLE:
-
+    case TerrainEditor::SOFT_CIRCLE:
         for (VertexType& vertex : vertices)
         {
             Vector3 pos = Vector3(vertex.pos.x, 0, vertex.pos.z);
-            pickingPos.y = 0;
+            pickingPos.y = 0.0f;
 
             float distance = Distance(pos, pickingPos);
 
-            float tmp = adjustValue * max(0, cos(distance / brushBuffer->Get().range));
+            float temp = adjustValue * max(0, cos(distance / brushBuffer->Get().range));
 
             if (distance <= brushBuffer->Get().range)
             {
-                vertex.pos.y += tmp * DELTA;
+                vertex.pos.y += temp * DELTA;
+
                 vertex.pos.y = Clamp(MIN_HEIGHT, MAX_HEIGHT, vertex.pos.y);
             }
         }
-
         break;
-
-    case RECT:
-
+    case TerrainEditor::RECT:
+    {
         float size = brushBuffer->Get().range * 0.5f;
 
         float left = max(0, pickingPos.x - size);
@@ -462,22 +405,24 @@ void TerrainEditor::AdjustHeight()
         float top = max(0, pickingPos.z + size);
         float bottom = max(0, pickingPos.z - size);
 
-        for (UINT z = (UINT)bottom; z <= (UINT)top; ++z)
+        for (UINT z = (UINT)bottom; z <= (UINT)top; z++)
         {
-            for (UINT x = (UINT)left; x <= (UINT)right; ++x)
+            for (UINT x = (UINT)left; x <= (UINT)right; x++)
             {
-                UINT index = width * ((height - 1) - z) + x;
+                UINT index = width * (height - z - 1) + x;
 
-                if (index >= vertices.size())
-                    continue;
+                if (index >= vertices.size()) continue;
 
                 vertices[index].pos.y += adjustValue * DELTA;
-                vertices[index].pos.y = Clamp(MIN_HEIGHT, MAX_HEIGHT, vertices[index].pos.y);
+                vertices[index].pos.y = Clamp(MIN_HEIGHT,
+                    MAX_HEIGHT, vertices[index].pos.y);
             }
         }
+    }
         break;
     }
 
+    //UpdateHeight();
     mesh->UpdateVertex();
 }
 
@@ -547,40 +492,34 @@ void TerrainEditor::AdjustAlpha()
     mesh->UpdateVertex();
 }
 
-void TerrainEditor::AdjustMap()
-{
-}
-
 void TerrainEditor::SaveHeightMap()
 {
     if (ImGui::Button("SaveHeight"))
-    {
         DIALOG->OpenDialog("SaveHeight", "SaveHeight", ".png", ".");
-    }
 
     if (DIALOG->Display("SaveHeight"))
     {
         if (DIALOG->IsOk())
         {
             string file = DIALOG->GetFilePathName();
+
             file = file.substr(projectPath.size() + 1, file.size());
 
             UINT size = width * height * 4;
             uint8_t* pixels = new uint8_t[size];
 
-            vector<VertexType>& vertices = mesh->GetVertices();
+            vector<VertexType> vertices = mesh->GetVertices();
 
-            for (UINT i = 0; i < size / 4; ++i)
+            for (UINT i = 0; i < size / 4; i++)
             {
                 float y = vertices[i].pos.y;
 
-                uint8_t height = ((y - MIN_HEIGHT) / (MAX_HEIGHT - MIN_HEIGHT)) * 255;
-
+                uint8_t height = (y - MIN_HEIGHT) / (MAX_HEIGHT - MIN_HEIGHT) * 255;
 
                 pixels[i * 4 + 0] = height;
-                pixels[i * 4 + 1] = height; 
-                pixels[i * 4 + 2] = height; 
-                pixels[i * 4 + 3] = 255;   
+                pixels[i * 4 + 1] = height;
+                pixels[i * 4 + 2] = height;
+                pixels[i * 4 + 3] = 255;
             }
 
             Image image;
@@ -603,14 +542,15 @@ void TerrainEditor::SaveHeightMap()
 
 void TerrainEditor::LoadHeightMap()
 {
-    if (ImGui::Button("LoadHeightMap"))
-        DIALOG->OpenDialog("LoadHeightMap", "LoadHeightMap", ".png", ".");
+    if (ImGui::Button("LoadHeight"))
+        DIALOG->OpenDialog("LoadHeight", "LoadHeight", ".png", ".");
 
-    if (DIALOG->Display("LoadHeightMap"))
+    if (DIALOG->Display("LoadHeight"))
     {
         if (DIALOG->IsOk())
         {
             string file = DIALOG->GetFilePathName();
+
             file = file.substr(projectPath.size() + 1, file.size());
 
             heightMap = Texture::Add(ToWString(file));
@@ -621,7 +561,6 @@ void TerrainEditor::LoadHeightMap()
         DIALOG->Close();
     }
 }
-
 
 void TerrainEditor::SaveAlphaMap()
 {

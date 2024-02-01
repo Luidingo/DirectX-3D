@@ -17,6 +17,9 @@ public:
     vector<T>& GetVertices() { return vertices; }
     vector<UINT>& GetIndices() { return indices; }
 
+    VertexBuffer* GetVertexBuffer() { return vertexBuffer; }
+    IndexBuffer* GetIndexBuffer() { return indexBuffer; }
+
 private:
     VertexBuffer* vertexBuffer = nullptr;
     IndexBuffer* indexBuffer = nullptr;

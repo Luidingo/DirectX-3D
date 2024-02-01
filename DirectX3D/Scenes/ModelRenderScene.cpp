@@ -3,17 +3,17 @@
 
 ModelRenderScene::ModelRenderScene()
 {
-	model = new Model("Fox");
+    model = new Model("Kunai");
 }
 
 ModelRenderScene::~ModelRenderScene()
 {
-	delete model;
+    delete model;
 }
 
 void ModelRenderScene::Update()
 {
-	model->UpdateWorld(); // 트랜스폼 데이터를 가진 객체로서 업데이트
+    model->UpdateWorld();
 }
 
 void ModelRenderScene::PreRender()
@@ -22,7 +22,7 @@ void ModelRenderScene::PreRender()
 
 void ModelRenderScene::Render()
 {
-	model->Render();
+    model->Render();
 }
 
 void ModelRenderScene::PostRender()
@@ -31,5 +31,5 @@ void ModelRenderScene::PostRender()
 
 void ModelRenderScene::GUIRender()
 {
-	model->GUIRender();
+    model->GUIRender();
 }

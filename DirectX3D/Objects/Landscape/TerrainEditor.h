@@ -1,44 +1,46 @@
 #pragma once
+
 class TerrainEditor : public GameObject
 {
 private:
-
     enum BrushType
     {
-        CIRCLE,      
-        SOFT_CIRCLE, 
-        RECT,        
+        CIRCLE, SOFT_CIRCLE, RECT
     };
 
     enum EditType
     {
-        HEIGHT,
-        ALPHA, 
-        MAP,   
+        HEIGHT, ALPHA
     };
 
     typedef VertexUVNormalTangentAlpha VertexType;
 
-    float MIN_HEIGHT = -10.0f;
-    float MAX_HEIGHT = +20.0f;
+    const float MIN_HEIGHT = 0.0f;
+    const float MAX_HEIGHT = 20.0f;
 
-    UINT MAX_SIZE = 256;      
+    const UINT MAX_SIZE = 256;
 
     class BrushBuffer : public ConstBuffer
     {
     private:
         struct Data
         {
-            int type = 0;     
+            int type = 0;
             Float3 pickingPos;
-            float range = 10; 
-            Float3 color = { 1, 1, 0 };
+
+            float range = 10.0f;
+            Float3 color = { 0, 1, 0 };
         };
-        Data data;
 
     public:
-        BrushBuffer() : ConstBuffer(&data, sizeof(Data)) {}
+        BrushBuffer() : ConstBuffer(&data, sizeof(Data))
+        {
+        }
+
         Data& Get() { return data; }
+
+    private:
+        Data data;
     };
 
     class RayBuffer : public ConstBuffer
@@ -46,30 +48,33 @@ private:
     private:
         struct Data
         {
-            Float3 pos;       
+            Float3 pos;
             UINT triangleSize;
 
-            Float3 dir;       
-            float padding;    
+            Float3 dir;
+            float padding;
         };
-        Data data;
 
     public:
-        RayBuffer() : ConstBuffer(&data, sizeof(Data)) {}
+        RayBuffer() : ConstBuffer(&data, sizeof(Data))
+        {
+        }
+
         Data& Get() { return data; }
+
+    private:
+        Data data;
     };
 
     struct InputDesc
     {
-        Float3 v0;
-        Float3 v1;
-        Float3 v2;
+        Float3 v0, v1, v2;
     };
 
     struct OutputDesc
     {
-        int isPicked;
-        float distance; 
+        int picked;
+        float distance;
     };
 
 public:
@@ -77,27 +82,23 @@ public:
     ~TerrainEditor();
 
     void Update();
-    void Render();
-    void RenderUI();
-
+    void Render() override;
+    void GUIRender() override;
 
     Vector3 Picking();
-    bool ComputePicking(Vector3& pos, Vector3 manualPos = Vector3(), Vector3 manualDir = Vector3());
-
-    Vector2 GetTerrainSize() { return { (float)width, (float)height }; }
+    bool ComputePicking(Vector3& pos);
 
 private:
     void MakeMesh();
     void MakeNormal();
-    void MakeTangent(); 
+    void MakeTangent();
     void MakeComputeData();
 
     void Resize();
-    void UpdateHeight(); 
+    void UpdateHeight();
 
-    void AdjustHeight(); 
-    void AdjustAlpha();  
-    void AdjustMap();    
+    void AdjustHeight();
+    void AdjustAlpha();
 
     void SaveHeightMap();
     void LoadHeightMap();
@@ -106,35 +107,30 @@ private:
     void LoadAlphaMap();
 
 private:
-    string projectPath; 
+    string projectPath;
 
-    UINT width;        
-    UINT height;       
-    UINT triangleSize; 
+    UINT width, height;    
+    UINT triangleSize;
 
-
-    float adjustValue = 10; 
+    float adjustValue = 10.0f;
     BrushType brushType = CIRCLE;
-    EditType editType = HEIGHT;  
+    EditType editType = ALPHA;
 
     UINT selectMap = 0;
 
     Vector3 pickingPos;
 
-    Mesh<VertexType>* mesh;
+    Mesh<VertexType>* mesh;    
     BrushBuffer* brushBuffer;
     RayBuffer* rayBuffer;
-    StructuredBuffer* structuredBuffer; 
+    StructuredBuffer* structuredBuffer;
 
     vector<InputDesc> inputs;
     vector<OutputDesc> outputs;
-
-    Texture* heightMap; 
+    
+    Texture* heightMap;
     Texture* secondMap;
     Texture* thirdMap;
 
-    ComputeShader* computeShader;
-
-    bool editEnabled = false;
+    ComputeShader* computeShader;    
 };
-

@@ -15,6 +15,10 @@ public:
 
     float GetHeight(const Vector3& pos, Vector3* normal = nullptr);
 
+    Vector3 Picking();
+
+    Vector2 GetSize() { return Vector2(width, height); } //가로 세로를 직접 받을 수 있게 추가
+
 private:
     void MakeMesh();
     void MakeNormal();

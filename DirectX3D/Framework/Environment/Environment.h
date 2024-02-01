@@ -20,9 +20,11 @@ public:
     void SetPerspective();
     void SetOrthographic();
 
-    Camera* GetMainCamera() { return mainCamera; }
+    LightBuffer::Light* AddLight();
 
+    Camera* GetMainCamera() { return mainCamera; }
     Matrix GetProjection() { return perspective; }
+    LightBuffer::Light* GetLight(UINT index) { return &lightBuffer->Get().lights[index]; }
 
 private:
     void CreateProjection();

@@ -8,7 +8,7 @@
 
 #define MAX_LIGHT 10
 #define MAX_BONE 512
-#define MAX_FRAME 512
+#define MAX_FRAME 2048
 #define MAX_INSTANCE 128
 
 #define CENTER_X (WIN_WIDTH * 0.5f)
@@ -52,6 +52,7 @@
 #include <Assimp/Importer.hpp>
 #include <Assimp/scene.h>
 #include <Assimp/postprocess.h>
+#include <FMOD/fmod.hpp>
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
@@ -61,6 +62,7 @@
 #pragma comment(lib, "d2d1.lib")
 #pragma comment(lib, "dwrite.lib")
 #pragma comment(lib, "assimp-vc143-mtd.lib")
+#pragma comment(lib, "fmod_vc.lib")
 
 using namespace std;
 using namespace DirectX;
@@ -87,6 +89,7 @@ typedef function<void(int)> IntParamEvent;
 #include "Framework/Utilities/Observer.h"
 #include "Framework/Utilities/Utility.h"
 #include "Framework/Utilities/Font.h"
+#include "Framework/Utilities/Audio.h"
 
 using namespace Utility;
 
@@ -104,6 +107,7 @@ using namespace Utility;
 #include "Framework/Shader/VertexShader.h"
 #include "Framework/Shader/PixelShader.h"
 #include "Framework/Shader/ComputeShader.h"
+#include "Framework/Shader/GeometryShader.h"
 
 #include "Framework/State/RasterizerState.h"
 #include "Framework/State/SamplerState.h"
@@ -118,6 +122,8 @@ using namespace Utility;
 #include "Framework/Render/Texture.h"
 #include "Framework/Render/Material.h"
 #include "Framework/Render/Mesh.h"
+#include "Framework/Render/DepthStencil.h"
+#include "Framework/Render/RenderTarget.h"
 
 #include "Framework/Collision/Collider.h"
 #include "Framework/Collision/BoxCollider.h"
@@ -125,16 +131,19 @@ using namespace Utility;
 #include "Framework/Collision/CapsuleCollider.h"
 
 #include "Framework/Model/ModelData.h"
-#include "Framework/Model/ModelMesh.h"
 #include "Framework/Model/ModelExporter.h"
+#include "Framework/Model/ModelMesh.h"
 #include "Framework/Model/Model.h"
 #include "Framework/Model/ModelClip.h"
 #include "Framework/Model/ModelAnimator.h"
+#include "Framework/Model/ModelInstancing.h"
+#include "Framework/Model/ModelAnimatorInstancing.h"
 
 using namespace GameMath;
 
 #include "Framework/Environment/Camera.h"
 #include "Framework/Environment/Environment.h"
+#include "Framework/Environment/Shadow.h"
 
 //Object Header
 #include "Objects/Basic/GameObject.h"
@@ -143,13 +152,29 @@ using namespace GameMath;
 #include "Objects/Basic/Sphere.h"
 #include "Objects/Basic/Cylinder.h"
 
+#include "Objects/Actor/ActorUI.h"
+#include "Objects/UI/ProgressBar.h"
+
+#include "Objects/Items/Weapons/Kunai.h"
+
 #include "Objects/Landscape/Terrain.h"
 #include "Objects/Landscape/TerrainEditor.h"
+#include "Objects/Landscape/SkyBox.h"
+
+#include "Objects/Algorithm/DNode.h"
+#include "Objects/Algorithm/Dijkstra.h"
+#include "Objects/Algorithm/Node.h"
+#include "Objects/Algorithm/Heap.h"
+#include "Objects/Algorithm/AStar.h"
+
+#include "Objects/Character/Human.h"
+#include "Objects/Character/Robot.h"
+#include "Objects/Character/Naruto.h"
+#include "Objects/Character/FoxD.h"
 
 #include "Objects/Manager/BlockManager.h"
-
-#include "Objects/Actor/ActorUI.h"
-#include "Objects/TestActor/TestActor.h"
+#include "Objects/Manager/KunaiManager.h"
+#include "Objects/Manager/RobotManager.h"
 
 //Scene Header
 #include "Scenes/Scene.h"

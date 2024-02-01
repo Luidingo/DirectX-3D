@@ -10,6 +10,8 @@ struct Vector2
     Vector2(POINT point) : x(point.x), y(point.y) {};
     Vector2(Float2 point) : x(point.x), y(point.y) {};
 
+    operator Float2() { return Float2(x, y); }
+
     Vector2 operator+(const Vector2& value) const
     {
         return Vector2(x + value.x, y + value.y);

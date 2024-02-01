@@ -9,6 +9,7 @@ public:
     void SetVS(UINT slot);
     void SetPS(UINT slot);
     void SetCS(UINT slot);
+    void SetGS(UINT slot);
 
 private:
     ID3D11Buffer* buffer;
