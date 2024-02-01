@@ -3,18 +3,23 @@
 class AStarScene : public Scene
 {
 public:
-	AStarScene();
-	~AStarScene();
+    AStarScene();
+    ~AStarScene();
 
-	virtual void Update() override;
-	virtual void PreRender() override;
-	virtual void Render() override;
-	virtual void PostRender() override;
-	virtual void GUIRender() override;
+    virtual void Update() override;
+    virtual void PreRender() override;
+    virtual void Render() override;
+    virtual void PostRender() override;
+    virtual void GUIRender() override;
 
 private:
-	Terrain* terrain;
-	AStar* aStar;
-	FoxA* fox;
+    //Terrain* terrain;
+    TerrainEditor* terrain;
+    
+    AStar* aStar;
+    AStar* aStarRobot;
+    
+    FoxA* fox;
+    RobotA* robot;
 };
 

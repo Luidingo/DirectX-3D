@@ -44,7 +44,7 @@ void AStar::Render()
         node->Render(); // 노드에 충돌체 설정이 켜져 있으면 렌더
 }
 
-void AStar::SetNode(Terrain* terrain)
+void AStar::SetNode(LevelData* terrain)
 {
     // 지형의 크기 (노드를 설치할 규모)
     //Vector2 mapSize = terrain->GetMaterial()->GetDiffuseMap()->GetSize(); //지도의 크기

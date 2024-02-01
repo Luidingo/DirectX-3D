@@ -142,6 +142,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Objects\Character\RobotA.h" />
     <ClInclude Include="Objects\Particle\Particle.h" />
     <ClInclude Include="Scenes\AStarScene.h" />
     <ClInclude Include="Objects\Character\FoxA.h" />
@@ -247,6 +248,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Objects\Character\RobotA.cpp" />
     <ClCompile Include="Objects\Particle\Particle.cpp" />
     <ClCompile Include="Scenes\AStarScene.cpp" />
     <ClCompile Include="Objects\Character\FoxA.cpp" />

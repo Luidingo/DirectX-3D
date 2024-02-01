@@ -5,6 +5,7 @@ TerrainEditor::TerrainEditor()
     width(MAX_SIZE), height(MAX_SIZE)
 {
     material->SetDiffuseMap(L"Textures/Landscape/Dirt2.png");
+    heightMap = Texture::Add(L"Textures/HeightMaps/TestMap.png");
     secondMap = Texture::Add(L"Textures/Landscape/Dirt.png");
     thirdMap = Texture::Add(L"Textures/Landscape/Dirt3.png");
 

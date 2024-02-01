@@ -34,8 +34,8 @@ void FoxA::Control()
 	// 노드는 이미 다 만들어져 있으므로 A*는 길만 찾으면 끝
 	if (KEY_DOWN(VK_LBUTTON)) // A*에서 안 쓴 쪽 마우스 버튼 쓰기
 	{
-		destPos = terrain->Picking(); // 목적지 찾기(Terrain용)
-		//terrain->ComputePicking(destPos); // 목적지 찾기(Terrain Editor용)
+		//destPos = terrain->Picking(); // 목적지 찾기(Terrain용)
+		terrain->ComputePicking(destPos); // 목적지 찾기(Terrain Editor용)
 
 
 		if (aStar->IsCollisionObstacle(GlobalPos(), destPos)) // 중간에 장애물이 있는 경우

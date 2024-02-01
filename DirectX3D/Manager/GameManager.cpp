@@ -36,7 +36,7 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("Cube", new CubeScene());
     //SceneManager::Get()->Create("Sphere", new SphereScene());
     //SceneManager::Get()->Create("Terrain", new TerrainEditorScene());
-    //SceneManager::Get()->Create("Collision", new CollisionScene());
+    SceneManager::Get()->Create("Collision", new CollisionScene());
     //SceneManager::Get()->Create("ModelRender", new ModelRenderScene());
     //SceneManager::Get()->Create("ModelAnimationScene", new ModelAnimationScene());
     //SceneManager::Get()->Create("Instancing", new IntancingScene());
@@ -45,18 +45,19 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("RenderTarget", new RenderTargetScene());
     //SceneManager::Get()->Create("ShadowScene", new ShadowScene());
     //SceneManager::Get()->Create("Dijkstra", new DijkstraScene());
-    SceneManager::Get()->Create("AStar", new AStarScene());
+    //SceneManager::Get()->Create("AStar", new AStarScene());
 
     SceneManager::Get()->Add("Grid");
-    //SceneManager::Get()->Add("ModelExport");
-    //SceneManager::Get()->Add("Collision");
+    SceneManager::Get()->Add("Collision");
+    //SceneManager::Get()->Add("ModelRender");
+    //SceneManager::Get()->Add("ModelAnimationScene");
     //SceneManager::Get()->Add("Instancing");
     //SceneManager::Get()->Add("Game");
     //SceneManager::Get()->Add("BillboardScene");
     //SceneManager::Get()->Add("RenderTarget");
     //SceneManager::Get()->Add("ShadowScene");
     //SceneManager::Get()->Add("Dijkstra");
-    SceneManager::Get()->Add("AStar");
+    //SceneManager::Get()->Add("AStar");
 }
 
 GameManager::~GameManager()

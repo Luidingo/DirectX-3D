@@ -8,8 +8,8 @@ private:
 		IDLE, RUN
 	};
 
-	typedef Terrain LevelData;
-	//typedef TerrainEditor LevelData;
+	//typedef Terrain LevelData;
+	typedef TerrainEditor LevelData;
 
 public:
 	FoxA();
