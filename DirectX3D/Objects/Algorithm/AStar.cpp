@@ -118,10 +118,41 @@ void AStar::GetPath(IN int start, IN int end, OUT vector<Vector3>& path)
     path.clear(); // 매개변수로 받은 (결과가 저장되어야 할) 벡터도 내용을 모두 비운다
 
     // 경로 계산 중에 사용할 지형 데이터도 준비하면서 초기화
-    float _g = 0; // 지형 ㄷ제이터
+    float _g = 0; // 지형 데이터
     float _h = GetDiagonalManhattanDistance(start, end); // 휴리스틱
                                 // 여기서의 휴리스틱(판단기준) = 격자 좌표 공간에서
                                 // 목적지로 가는 직선 최단 경로 (가로, 세로, 격자 대각선 구성)
+
+    // 시작 지점의 노드 데이터 설정
+    nodes[start]->f = _g + _h; // 최종비용 = 지형 + 휴리스틱
+    nodes[start]->g = _g;
+    nodes[start]->h = _h;
+    nodes[start]->via = start; // -1 (없음) 혹은 자기 자신으로
+    nodes[start]->state = Node::OPEN; // 이 노드는 경로 연산에 들어갈 준비가 됐다
+
+    // 시작 노드를 힙에 넣어준다
+    heap->Insert(nodes[start]); // 노드 벡터의 "출발지"번째 요소를 힙에 추가
+
+    while (nodes[end]->state != Node::CLOSED)
+            // 목적지의 상태가 연산종료(닫힘)이 될 때까지 경로 탐색
+    {
+        if (heap->Empty()) return; // 반복문 수행 중에(혹은 시작시) 힙이 비어 있으면 그대로 종료
+        
+        int curIndex = GetMinNode(); // 주변에서 최소비용 노드 선택
+
+        Extend(curIndex, end); // 탐색 확장 (지금 찾은 최소비용 노드에서, 목적지를 향해)
+        nodes[curIndex]->state = Node::CLOSED; // 반복문 중에 경로 탐색을 수행한 이 노드를 탐색 종료 상태로
+    }
+
+    // 여기까지 오면 목적지까지 간 후 경로 탐색이 끝난 상태이므로
+    int curIndex = end; // 인덱스를 목적지의 인덱스로
+
+    // 다시 뒤에서부터 노드들을 찾아가면서 최단경로에 들어가는 노드를 경로에 포함
+    while (curIndex != start) // 인덱스가 출발지로 돌아올 때까지
+    {
+        nodes[curIndex]->state = Node::USING; // 경로로 사용됨
+        path.push_back(nodes[curIndex]->GlobalPos());
+    }
 }
 
 void AStar::MakeDirectionPath(IN Vector3 start, IN Vector3 end, OUT vector<Vector3>& path)

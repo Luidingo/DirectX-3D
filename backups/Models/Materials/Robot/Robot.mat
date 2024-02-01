@@ -1,0 +1,10 @@
+<Material Name="Robot">
+    <Shader Vertex="" Pixel="Shaders/Model/ModelAnimation.hlsl"/>
+    <Texture Diffuse="Textures\Model\Robot\Robot_Color.tga" Specular="Textures/Color/White.png" Normal="Textures\Model\Robot\Robot_Normal.tga"/>
+    <Property Shininess="8.4379559" HasNormalMap="1">
+        <Diffuse R="0.80000001" G="0.80000001" B="0.80000001" A="1"/>
+        <Specular R="0.5" G="0.5" B="0.5" A="1"/>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Property>
+</Material>

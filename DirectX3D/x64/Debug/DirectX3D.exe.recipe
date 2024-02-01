@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ProjectOutputs>
+    <ProjectOutput>
+      <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\DirectX3D.exe</FullPath>
+    </ProjectOutput>
+  </ProjectOutputs>
+  <ContentFiles>
+    <ContentFile>
+      <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\Collider.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\Texture.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\Grid.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\ByteAddress.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\ComputePicking.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\Terrain.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\TerrainEditor.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\Light.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\ModelAnimation.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\ModelAnimationInstancing.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\ModelInstancing.cso</FullPath>
+    </ContentFile>
+  </ContentFiles>
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
+</Project>
