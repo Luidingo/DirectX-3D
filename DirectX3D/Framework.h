@@ -169,6 +169,8 @@ using namespace GameMath;
 
 #include "Objects/Particle/Particle.h"
 #include "Objects/Particle/Spark.h"
+#include "Objects/Particle/Rain.h"
+#include "Objects/Particle/Sprite.h"
 
 #include "Objects/Character/Human.h"
 #include "Objects/Character/Robot.h"

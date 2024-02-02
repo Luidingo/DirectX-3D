@@ -53,16 +53,71 @@ void Spark::Render()
 
 void Spark::GUIRender()
 {
+	ImGui::Text("Spark Option");
+	ImGui::SliderInt("ParticleCount", (int*)&particleCount, 1, MAX_COUNT);
+	ImGui::SliderFloat("Duration", &buffer->Get()[1], 0.0f, 10.0f);			// 지속시간
+	ImGui::SliderFloat("MinRadius", &minRadius, 1.0f, maxRadius);			// 최소 반경
+	ImGui::SliderFloat("MaxRadius", &maxRadius, minRadius, 50.0f);			// 최대 반경
+	ImGui::SliderFloat("MinSize", &minSize, 0.1f, maxSize);					// 최소 크기 (입자)
+	ImGui::SliderFloat("MaxSize", &maxSize, minSize, 10.0f);				// 최대 크기 (입자)
+
+	ImGui::ColorEdit4("StartColor", (float*)&startColorBuffer->Get());		// 시작시 색깔
+	ImGui::ColorEdit4("EndColor", (float*)&endColorBuffer->Get());			// 종료시 색깔
 }
 
 void Spark::Play(Vector3 pos)
 {
+	buffer->Get()[0] = 0;	// 재생된 시간 리셋
+	Particle::Play(pos);	// 매개변수를 전달해서 부모 함수 실행
+
+	UpdateParticle();		// 파티클(정점) 업테이트 후
+	vertexBuffer->Update(vertices.data(), particleCount); 
+							// 업데이트를 버퍼에서 반영
 }
 
 void Spark::Create()
 {
+	vertices.resize(MAX_COUNT); // 메모리가 급하게 변동되지 않도록 최대 예약
+	vertexBuffer = new VertexBuffer(vertices.data(), sizeof(VertexParticle), MAX_COUNT);
+
+	// particleCount = MAX_COUNT; // 실제 파티클 입자 개수
+	particleCount = 500; // 수동으로 값을 바꿔주면 입자 개수 조절 가능
+
+	// 지속 시간 설정
+	buffer->Get()[1] = 1.0f; // 다른 곳에서 받아오거나 직접 입력하거나
 }
 
 void Spark::UpdateParticle()
 {
+	// 모든 입자를 반복문으로 진행
+	FOR(particleCount)
+	{
+		vertices[i].position = position;
+
+		float size = Random(minSize, maxSize);
+		vertices[i].size = { size, size };
+
+		float radius = Random(minRadius, maxRadius); // 반경 계산
+		
+		Float3 rot; // 방향 계산
+		rot.x = Random(0.0f, XM_2PI); // XM_2PI : 호도법으로 계산된 "반경 x 원주율" 의 2배 = 360도
+		rot.y = Random(0.0f, XM_2PI);
+		rot.z = Random(0.0f, XM_2PI);
+		// -> 3차원 360도 완전 랜덤
+
+		// 속력 기준 만들기
+		Vector3 velocity = Vector3(0, 0, radius); // 반경만한 속력의 "앞"으로
+
+		// 위에서 나온 반경-방향-속력 기준으로 "속도"를 생성
+		// * 속도 벡터는 속력 벡터와 방향 벡터를 모두 가진 벡터
+		Matrix matRot = XMMatrixRotationRollPitchYaw(rot.x, rot.y, rot.z); // 방향과 크기를 가진 공간부터 만들기
+						// XMMatrix : 벡터를 크기를 갖춘 공간으로 만드는 DX 제공 함수
+						// RollPitchYaw : X축, Y축, Z축 회전을 반영하는 행렬 회전
+		XMStoreFloat3(&vertices[i].velocity, XMVector3TransformCoord(velocity, matRot));
+		// XMStoreFloat3 : 행렬과 벡터 정보를 새로운 벡터 정보로 바꿔서 담아주는 함수
+		// XMVector3TransformCoord : 벡터와(속력 기준) 행렬 정보(방향과 크기가 있는 공간)를 합쳐서 새 벡터로 저장해주는 함수
+		// -> XMVector3TransformCoord 실행의 결과를 &vertices[i].velocity 데이터에 담아준다
+
+		// 위 과정으로 각 정점이 다음 순간에 (혹은 다음 틱에) 가야 할 곳을 지정
+	}
 }

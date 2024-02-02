@@ -15,16 +15,12 @@
 #include "Scenes/ShadowScene.h"
 #include "Scenes/DijkstraScene.h"
 #include "Scenes/AStarScene.h"
+#include "Scenes/ParticleScene.h"
 
-// 오늘의 과제 : 이론 추가 조사
+// 주말의 과제
 
-// A*를 활용한 다른 길찾기 알고리즘도 있습니다. 어떤 것들이 있는지 알아봅시다
-// -> 직접 만들지는 않아도, 이후 엔진 등에서 선택해야 할 수 있습니다.
-
-// 그 중에서도 가장 대중적인 길찾기 알고리즘이 있습니다. : D* (D-스타, 다이-스타, 다이내믹 스타)
-// -> D* 가 어떤 것인지, A*와는 어떻게 다른지 알아봐주세요
-
-// -> 알아본 결과를 카페에 올려주시기 바랍니다.
+// 게임 씬에서, 나루토가 로봇을 때렸을 때, 로봇이 맞을 때마다
+// 로봇이 임의의/선택한 파티클 효과를 출력하도록 해보자
 
 GameManager::GameManager()
 {
@@ -36,7 +32,7 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("Cube", new CubeScene());
     //SceneManager::Get()->Create("Sphere", new SphereScene());
     //SceneManager::Get()->Create("Terrain", new TerrainEditorScene());
-    SceneManager::Get()->Create("Collision", new CollisionScene());
+    //SceneManager::Get()->Create("Collision", new CollisionScene());
     //SceneManager::Get()->Create("ModelRender", new ModelRenderScene());
     //SceneManager::Get()->Create("ModelAnimationScene", new ModelAnimationScene());
     //SceneManager::Get()->Create("Instancing", new IntancingScene());
@@ -46,9 +42,10 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("ShadowScene", new ShadowScene());
     //SceneManager::Get()->Create("Dijkstra", new DijkstraScene());
     //SceneManager::Get()->Create("AStar", new AStarScene());
+    SceneManager::Get()->Create("Particle", new ParticleScene());
 
     SceneManager::Get()->Add("Grid");
-    SceneManager::Get()->Add("Collision");
+    //SceneManager::Get()->Add("Collision");
     //SceneManager::Get()->Add("ModelRender");
     //SceneManager::Get()->Add("ModelAnimationScene");
     //SceneManager::Get()->Add("Instancing");
@@ -57,7 +54,7 @@ GameManager::GameManager()
     //SceneManager::Get()->Add("RenderTarget");
     //SceneManager::Get()->Add("ShadowScene");
     //SceneManager::Get()->Add("Dijkstra");
-    //SceneManager::Get()->Add("AStar");
+    SceneManager::Get()->Add("Particle");
 }
 
 GameManager::~GameManager()

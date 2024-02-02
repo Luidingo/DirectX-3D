@@ -144,6 +144,8 @@
   <ItemGroup>
     <ClInclude Include="Objects\Character\RobotA.h" />
     <ClInclude Include="Objects\Particle\Particle.h" />
+    <ClInclude Include="Objects\Particle\Rain.h" />
+    <ClInclude Include="Scenes\ParticleScene.h" />
     <ClInclude Include="Scenes\AStarScene.h" />
     <ClInclude Include="Objects\Character\FoxA.h" />
     <ClInclude Include="Objects\Algorithm\AStar.h" />
@@ -245,11 +247,14 @@
     <ClInclude Include="Framework\Environment\Shadow.h" />
     <ClInclude Include="Scenes\ShadowScene.h" />
     <ClInclude Include="Objects\Particle\Spark.h" />
+    <ClInclude Include="Objects\Particle\Sprite.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Objects\Character\RobotA.cpp" />
     <ClCompile Include="Objects\Particle\Particle.cpp" />
+    <ClCompile Include="Objects\Particle\Rain.cpp" />
+    <ClCompile Include="Scenes\ParticleScene.cpp" />
     <ClCompile Include="Scenes\AStarScene.cpp" />
     <ClCompile Include="Objects\Character\FoxA.cpp" />
     <ClCompile Include="Objects\Algorithm\AStar.cpp" />
@@ -344,6 +349,7 @@
     <ClCompile Include="Framework\Environment\Shadow.cpp" />
     <ClCompile Include="Scenes\ShadowScene.cpp" />
     <ClCompile Include="Objects\Particle\Spark.cpp" />
+    <ClCompile Include="Objects\Particle\Sprite.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DirectX3D.rc" />

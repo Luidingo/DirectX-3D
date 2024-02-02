@@ -33,7 +33,7 @@ private:
 private:
     State curState = WALK;
 
-    float moveSpeed = 5.f;
+    float moveSpeed = 10.f;
     float rotSpeed = 10.f;
 
     float deltaTime = 1.f;
