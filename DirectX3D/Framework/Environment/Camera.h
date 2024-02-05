@@ -46,10 +46,10 @@ private:
 
     Transform* target = nullptr;    
 
-    float distance = 20.0f;
-    float height = 20.0f;
+    float distance = 300.0f;
+    float height = 200.0f;
     float moveDamping = 5.0f;
-    float rotDamping = 1.0f;
+    float rotDamping = 10.0f;
 
     float rotY = 0;
 
@@ -57,7 +57,7 @@ private:
     Vector3 destPos;
     Vector3 focusOffset;
 
-    bool isLookAtTargetX = true;
+    bool isLookAtTargetX = false;
     bool isLookAtTargetY = true;
 
     Matrix rotMatrix;

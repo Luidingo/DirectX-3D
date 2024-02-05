@@ -4,8 +4,10 @@ Naruto::Naruto()
     : ModelAnimator("Naruto")
 {
     // 윈도우 핸들러의 정보값(중 윈도우 크기)을 두 번째 매개변수에 저장
-    //ClientToScreen(hWnd, &clientCenterPos);
-    //SetCursorPos(clientCenterPos.x, clientCenterPos.y);
+    ClientToScreen(hWnd, &clientCenterPos);
+    SetCursorPos(clientCenterPos.x, clientCenterPos.y);
+
+    CAM->SetTarget(this);
 
     mainHand = new Transform();
     tmpCollider = new SphereCollider();
@@ -80,7 +82,7 @@ void Naruto::GUIRender()
 
 void Naruto::Control()
 {
-    //Rotate();
+    Rotate();
     Move();
     Attack();
 }

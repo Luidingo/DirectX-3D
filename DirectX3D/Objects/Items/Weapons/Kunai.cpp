@@ -10,11 +10,18 @@ Kunai::Kunai(Transform* transform) : transform(transform)
 
     collider->Scale() = { 2, 2, 2 }; //크기 기본값은 1.0
     collider->Pos() = {};            //위치 기본값 : 부모 위치
+
+    startEdge = new Transform();
+    endEdge = new Transform();
+    trail = new Trail(L"Textures/Effect/Trail.png", startEdge, endEdge, 10, 30.f);
 }
 
 Kunai::~Kunai()
 {
     delete collider;
+    delete trail;
+    delete startEdge;
+    delete endEdge;
 }
 
 void Kunai::Update()
@@ -30,11 +37,20 @@ void Kunai::Update()
     transform->Pos() += direction * speed * DELTA;
 
     collider->UpdateWorld();
+
+    startEdge->Pos() = transform->GlobalPos() + transform->Up() * 20.f;
+    endEdge->Pos() = transform->GlobalPos() + transform->Down() * 20.f;
+
+    startEdge->UpdateWorld();
+    endEdge->UpdateWorld();
+
+    trail->Update();
 }
 
 void Kunai::Render()
 {
     collider->Render();
+    trail->Render();
 }
 
 void Kunai::Throw(Vector3 pos, Vector3 dir)
@@ -44,6 +60,16 @@ void Kunai::Throw(Vector3 pos, Vector3 dir)
 
     transform->Pos() = pos;
     direction = dir;
+
+    transform->UpdateWorld();
+
+    startEdge->Pos() = transform->GlobalPos() + transform->Up() * 20.f;
+    endEdge->Pos() = transform->GlobalPos() + transform->Down() * 20.f;
+
+    startEdge->UpdateWorld();
+    endEdge->UpdateWorld();
+
+    trail->Update();
 
     //방향에 맞게 모델(=트랜스폼) 회전 적용
     transform->Rot().y = atan2(dir.x, dir.z) - XM_PIDIV2; //방향 적용 + 모델 정면에 따른 보정

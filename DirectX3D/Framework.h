@@ -155,6 +155,8 @@ using namespace GameMath;
 #include "Objects/Actor/ActorUI.h"
 #include "Objects/UI/ProgressBar.h"
 
+#include "Objects/Particle/Trail.h"
+
 #include "Objects/Items/Weapons/Kunai.h"
 #include "Objects/Items/Weapons/Crowbar.h"
 
@@ -173,7 +175,6 @@ using namespace GameMath;
 #include "Objects/Particle/Spark.h"
 #include "Objects/Particle/Rain.h"
 #include "Objects/Particle/Sprite.h"
-#include "Objects/Particle/Trail.h"
 
 #include "Objects/Character/Human.h"
 #include "Objects/Character/Robot.h"

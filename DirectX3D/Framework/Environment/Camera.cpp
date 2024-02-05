@@ -175,7 +175,7 @@ void Camera::FollowMode()
     destRot = Lerp(destRot, target->Rot().y, rotDamping * DELTA);    
     rotMatrix = XMMatrixRotationY(destRot + rotY);
 
-    Vector3 forward = XMVector3TransformNormal(Vector3::Forward(), rotMatrix);
+    Vector3 forward = XMVector3TransformNormal(Vector3::Back(), rotMatrix);
 
     destPos = target->GlobalPos() + forward * -distance;
     destPos.y += height;
