@@ -156,6 +156,7 @@ using namespace GameMath;
 #include "Objects/UI/ProgressBar.h"
 
 #include "Objects/Items/Weapons/Kunai.h"
+#include "Objects/Items/Weapons/Crowbar.h"
 
 #include "Objects/Landscape/Terrain.h"
 #include "Objects/Landscape/TerrainEditor.h"
@@ -168,9 +169,11 @@ using namespace GameMath;
 #include "Objects/Algorithm/AStar.h"
 
 #include "Objects/Particle/Particle.h"
+#include "Objects/Particle/ParticleSystem.h"
 #include "Objects/Particle/Spark.h"
 #include "Objects/Particle/Rain.h"
 #include "Objects/Particle/Sprite.h"
+#include "Objects/Particle/Trail.h"
 
 #include "Objects/Character/Human.h"
 #include "Objects/Character/Robot.h"

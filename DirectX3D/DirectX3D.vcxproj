@@ -142,7 +142,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Objects\Particle\ParticleSystem.h" />
+    <ClInclude Include="Scenes\HumanScene.h" />
     <ClInclude Include="Objects\Character\RobotA.h" />
+    <ClInclude Include="Objects\Items\Weapons\Crowbar.h" />
     <ClInclude Include="Objects\Particle\Particle.h" />
     <ClInclude Include="Objects\Particle\Rain.h" />
     <ClInclude Include="Scenes\ParticleScene.h" />
@@ -249,9 +252,13 @@
     <ClInclude Include="Objects\Particle\Spark.h" />
     <ClInclude Include="Objects\Particle\Sprite.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Objects\Particle\Trail.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Objects\Particle\ParticleSystem.cpp" />
+    <ClCompile Include="Scenes\HumanScene.cpp" />
     <ClCompile Include="Objects\Character\RobotA.cpp" />
+    <ClCompile Include="Objects\Items\Weapons\Crowbar.cpp" />
     <ClCompile Include="Objects\Particle\Particle.cpp" />
     <ClCompile Include="Objects\Particle\Rain.cpp" />
     <ClCompile Include="Scenes\ParticleScene.cpp" />
@@ -350,6 +357,7 @@
     <ClCompile Include="Scenes\ShadowScene.cpp" />
     <ClCompile Include="Objects\Particle\Spark.cpp" />
     <ClCompile Include="Objects\Particle\Sprite.cpp" />
+    <ClCompile Include="Objects\Particle\Trail.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DirectX3D.rc" />

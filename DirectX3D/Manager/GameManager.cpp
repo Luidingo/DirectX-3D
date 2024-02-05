@@ -16,6 +16,7 @@
 #include "Scenes/DijkstraScene.h"
 #include "Scenes/AStarScene.h"
 #include "Scenes/ParticleScene.h"
+#include "Scenes/HumanScene.h"
 
 // 주말의 과제
 
@@ -42,7 +43,8 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("ShadowScene", new ShadowScene());
     //SceneManager::Get()->Create("Dijkstra", new DijkstraScene());
     //SceneManager::Get()->Create("AStar", new AStarScene());
-    SceneManager::Get()->Create("Particle", new ParticleScene());
+    //SceneManager::Get()->Create("Particle", new ParticleScene());
+    SceneManager::Get()->Create("Human", new HumanScene());
 
     SceneManager::Get()->Add("Grid");
     //SceneManager::Get()->Add("Collision");
@@ -54,7 +56,8 @@ GameManager::GameManager()
     //SceneManager::Get()->Add("RenderTarget");
     //SceneManager::Get()->Add("ShadowScene");
     //SceneManager::Get()->Add("Dijkstra");
-    SceneManager::Get()->Add("Particle");
+    //SceneManager::Get()->Add("Particle");
+    SceneManager::Get()->Add("Human");
 }
 
 GameManager::~GameManager()
