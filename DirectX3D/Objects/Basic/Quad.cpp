@@ -34,6 +34,16 @@ void Quad::Render()
     mesh->Draw();
 }
 
+void Quad::SetRender()
+{
+    // 가장 먼저 쿼드 스스로가 갖고 있는 메쉬를 렌더 준비
+    mesh->GetVertexBuffer()->Set(); 
+            // 메쉬를 만들 때 썼던 정점들...을 버퍼로 만든 것...을 렌더 준비
+    mesh->GetIndexBuffer()->Set(); // 순번 목록의 버퍼도 마찬가지
+
+    GameObject::SetRender(); //나머지 데이터 렌더 준비
+}
+
 void Quad::MakeMesh()
 {
     float left = -size.x * 0.5f;

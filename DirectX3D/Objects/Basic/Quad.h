@@ -11,6 +11,7 @@ public:
     ~Quad();
 
     void Render();
+    void SetRender();
 
 private:
     void MakeMesh();

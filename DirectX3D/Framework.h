@@ -161,8 +161,10 @@ using namespace GameMath;
 #include "Objects/Items/Weapons/Crowbar.h"
 
 #include "Objects/Landscape/Terrain.h"
+#include "Objects/Landscape/TerrainData.h"
 #include "Objects/Landscape/TerrainEditor.h"
 #include "Objects/Landscape/SkyBox.h"
+#include "Objects/Landscape/QuadTreeTerrain.h"
 
 #include "Objects/Algorithm/DNode.h"
 #include "Objects/Algorithm/Dijkstra.h"

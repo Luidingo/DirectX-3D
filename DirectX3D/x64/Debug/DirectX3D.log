@@ -1,1 +1,5 @@
-﻿  DirectX3D.vcxproj -> D:\Github\DirectX-3D\x64\Debug\DirectX3D.exe
+﻿  GameManager.cpp
+  ParticleConfigScene.cpp
+C:\Users\user\Documents\GitHub\DirectX-3D\DirectX3D\Scenes\ParticleConfigScene.cpp(132,5): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+  코드를 생성하고 있습니다...
+  DirectX3D.vcxproj -> C:\Users\user\Documents\GitHub\DirectX-3D\x64\Debug\DirectX3D.exe
