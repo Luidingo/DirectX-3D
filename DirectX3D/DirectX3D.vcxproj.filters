@@ -342,7 +342,7 @@
     <ClInclude Include="Objects\Particle\Trail.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Scenes\HumanScene.h">
+    <ClInclude Include="Scenes\TrailScene.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Objects\Particle\ParticleSystem.h">
@@ -656,7 +656,7 @@
     <ClCompile Include="Objects\Particle\Trail.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Scenes\HumanScene.cpp">
+    <ClCompile Include="Scenes\TrailScene.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Objects\Particle\ParticleSystem.cpp">

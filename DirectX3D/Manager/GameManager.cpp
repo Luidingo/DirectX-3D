@@ -9,6 +9,9 @@
 #include "Scenes/ModelRenderScene.h"
 #include "Scenes/ModelAnimationScene.h"
 #include "Scenes/IntancingScene.h"
+#include "Scenes/InstancingMScene.h"
+#include "Scenes/InstancingAScene.h"
+#include "Scenes/LightScene.h"
 #include "Scenes/GameScene.h"
 #include "Scenes/BillboardScene.h"
 #include "Scenes/RenderTargetScene.h"
@@ -16,7 +19,7 @@
 #include "Scenes/DijkstraScene.h"
 #include "Scenes/AStarScene.h"
 #include "Scenes/ParticleScene.h"
-#include "Scenes/HumanScene.h"
+#include "Scenes/TrailScene.h"
 #include "Scenes/ParticleConfigScene.h"
 
 // 주말의 과제
@@ -38,6 +41,9 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("ModelRender", new ModelRenderScene());
     //SceneManager::Get()->Create("ModelAnimationScene", new ModelAnimationScene());
     //SceneManager::Get()->Create("Instancing", new IntancingScene());
+    //SceneManager::Get()->Create("InstancingM", new InstancingMScene());
+    //SceneManager::Get()->Create("InstancingA", new InstancingAScene());
+    SceneManager::Get()->Create("Light", new LightScene());
     //SceneManager::Get()->Create("Game", new GameScene());
     //SceneManager::Get()->Create("BillboardScene", new BillboardScene());
     //SceneManager::Get()->Create("RenderTarget", new RenderTargetScene());
@@ -45,23 +51,30 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("Dijkstra", new DijkstraScene());
     //SceneManager::Get()->Create("AStar", new AStarScene());
     //SceneManager::Get()->Create("Particle", new ParticleScene());
-    //SceneManager::Get()->Create("Human", new HumanScene());
-    SceneManager::Get()->Create("ParticleConfig", new ParticleConfigScene());
+    //SceneManager::Get()->Create("Trail", new TrailScene());
+    //SceneManager::Get()->Create("ParticleConfig", new ParticleConfigScene());
     
 
     SceneManager::Get()->Add("Grid");
+    //SceneManager::Get()->Add("ModelExport");
+
+    //SceneManager::Get()->Add("Cube");
+    //SceneManager::Get()->Add("Sphere");
     //SceneManager::Get()->Add("Collision");
     //SceneManager::Get()->Add("ModelRender");
     //SceneManager::Get()->Add("ModelAnimationScene");
     //SceneManager::Get()->Add("Instancing");
+    //SceneManager::Get()->Add("InstancingM");
+    //SceneManager::Get()->Add("InstancingA");
+    SceneManager::Get()->Add("Light");
     //SceneManager::Get()->Add("Game");
     //SceneManager::Get()->Add("BillboardScene");
     //SceneManager::Get()->Add("RenderTarget");
     //SceneManager::Get()->Add("ShadowScene");
     //SceneManager::Get()->Add("Dijkstra");
     //SceneManager::Get()->Add("Particle");
-    //SceneManager::Get()->Add("Human");
-    SceneManager::Get()->Add("ParticleConfig");
+    //SceneManager::Get()->Add("Trail");
+    //SceneManager::Get()->Add("ParticleConfig");
 }
 
 GameManager::~GameManager()

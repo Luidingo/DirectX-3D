@@ -144,7 +144,7 @@
   <ItemGroup>
     <ClInclude Include="Objects\Particle\ParticleSystem.h" />
     <ClInclude Include="Objects\Landscape\QuadTreeTerrain.h" />
-    <ClInclude Include="Scenes\HumanScene.h" />
+    <ClInclude Include="Scenes\TrailScene.h" />
     <ClInclude Include="Objects\Character\RobotA.h" />
     <ClInclude Include="Objects\Items\Weapons\Crowbar.h" />
     <ClInclude Include="Objects\Particle\Particle.h" />
@@ -260,7 +260,7 @@
   <ItemGroup>
     <ClCompile Include="Objects\Particle\ParticleSystem.cpp" />
     <ClCompile Include="Objects\Landscape\QuadTreeTerrain.cpp" />
-    <ClCompile Include="Scenes\HumanScene.cpp" />
+    <ClCompile Include="Scenes\TrailScene.cpp" />
     <ClCompile Include="Objects\Character\RobotA.cpp" />
     <ClCompile Include="Objects\Items\Weapons\Crowbar.cpp" />
     <ClCompile Include="Objects\Particle\Particle.cpp" />

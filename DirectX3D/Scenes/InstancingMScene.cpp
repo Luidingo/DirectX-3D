@@ -13,7 +13,7 @@ InstancingMScene::InstancingMScene()
 		{
 			Transform* transform = models->Add();
 			transform->Pos() = { x, 0, z };
-			transform->Scale() *= 0.01f; // 원래 크기의 1/100
+			transform->Scale() *= 0.1f; // 원래 크기의 1/100
 		}
 	}
 }

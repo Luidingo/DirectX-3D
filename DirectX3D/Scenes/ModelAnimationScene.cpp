@@ -38,12 +38,11 @@ ModelAnimationScene::ModelAnimationScene()
     //modelAnimator = new ModelAnimator("Fox");
     //modelAnimator->ReadClip("Fox_Run");
 
-    modelAnimator = new ModelAnimator("Robot");
-    modelAnimator->ReadClip("Run");
-    modelAnimator->ReadClip("Walk");
-    modelAnimator->ReadClip("Dying");
-    modelAnimator->ReadClip("StandUp");
-    modelAnimator->ReadClip("Hit");
+    modelAnimator = new ModelAnimator("Geralt");
+    modelAnimator->Scale() *= 0.05f;
+    modelAnimator->ReadClip("Idle", 0);
+
+    modelAnimator->PlayClip(0);
 }
 
 ModelAnimationScene::~ModelAnimationScene()
@@ -53,17 +52,6 @@ ModelAnimationScene::~ModelAnimationScene()
 
 void ModelAnimationScene::Update()
 {
-    if (KEY_DOWN('1'))
-        modelAnimator->PlayClip(0);
-    if (KEY_DOWN('2'))
-        modelAnimator->PlayClip(1);
-    if (KEY_DOWN('3'))
-        modelAnimator->PlayClip(2);
-    if (KEY_DOWN('4'))
-        modelAnimator->PlayClip(3);
-    if (KEY_DOWN('5'))
-        modelAnimator->PlayClip(4);
-
     modelAnimator->Update();
 }
 
@@ -87,5 +75,4 @@ void ModelAnimationScene::GUIRender()
 
 void ModelAnimationScene::SetIdle()
 {
-    modelAnimator->PlayClip(0, 1.0f, 0.1f);
 }
