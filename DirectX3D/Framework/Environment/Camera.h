@@ -24,6 +24,7 @@ public:
     void TargetOptionLoad(string file);
 
     bool ContainPoint(Vector3 point);
+    bool ContainPoint(Vector3 center, float radius);
 
 private:
     void FreeMode();

@@ -21,6 +21,7 @@
 #include "Scenes/ParticleScene.h"
 #include "Scenes/TrailScene.h"
 #include "Scenes/ParticleConfigScene.h"
+#include "Scenes/QuadTreeScene.h"
 
 // 주말의 과제
 
@@ -43,7 +44,7 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("Instancing", new IntancingScene());
     //SceneManager::Get()->Create("InstancingM", new InstancingMScene());
     //SceneManager::Get()->Create("InstancingA", new InstancingAScene());
-    SceneManager::Get()->Create("Light", new LightScene());
+    //SceneManager::Get()->Create("Light", new LightScene());
     //SceneManager::Get()->Create("Game", new GameScene());
     //SceneManager::Get()->Create("BillboardScene", new BillboardScene());
     //SceneManager::Get()->Create("RenderTarget", new RenderTargetScene());
@@ -53,6 +54,8 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("Particle", new ParticleScene());
     //SceneManager::Get()->Create("Trail", new TrailScene());
     //SceneManager::Get()->Create("ParticleConfig", new ParticleConfigScene());
+    SceneManager::Get()->Create("QuadTree", new QuadTreeScene());
+
     
 
     SceneManager::Get()->Add("Grid");
@@ -66,7 +69,7 @@ GameManager::GameManager()
     //SceneManager::Get()->Add("Instancing");
     //SceneManager::Get()->Add("InstancingM");
     //SceneManager::Get()->Add("InstancingA");
-    SceneManager::Get()->Add("Light");
+    //SceneManager::Get()->Add("Light");
     //SceneManager::Get()->Add("Game");
     //SceneManager::Get()->Add("BillboardScene");
     //SceneManager::Get()->Add("RenderTarget");
@@ -75,6 +78,7 @@ GameManager::GameManager()
     //SceneManager::Get()->Add("Particle");
     //SceneManager::Get()->Add("Trail");
     //SceneManager::Get()->Add("ParticleConfig");
+    SceneManager::Get()->Add("QuadTree");
 }
 
 GameManager::~GameManager()

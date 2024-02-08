@@ -297,3 +297,84 @@ bool Camera::ContainPoint(Vector3 point)
 
     return true;
 }
+
+bool Camera::ContainPoint(Vector3 center, float radius)
+{
+    Vector3 edge; // 가장자리
+    Vector3 dot; // 점곱에 의한 재계산 벡터
+
+    FOR(6)
+    {
+        // 1
+        edge.x = center.x - radius;
+        edge.y = center.y - radius;
+        edge.z = center.z - radius;
+
+        dot = XMPlaneDotCoord(planes[i], edge);
+        if (dot.x > 0) continue;
+
+        // 2
+        edge.x = center.x + radius;
+        edge.y = center.y - radius;
+        edge.z = center.z - radius;
+
+        dot = XMPlaneDotCoord(planes[i], edge);
+        if (dot.x > 0) continue;
+
+        // 3
+        edge.x = center.x - radius;
+        edge.y = center.y + radius;
+        edge.z = center.z - radius;
+
+        dot = XMPlaneDotCoord(planes[i], edge);
+        if (dot.x > 0) continue;
+
+        // 4
+        edge.x = center.x - radius;
+        edge.y = center.y - radius;
+        edge.z = center.z + radius;
+
+        dot = XMPlaneDotCoord(planes[i], edge);
+        if (dot.x > 0) continue;
+
+        // 5
+        edge.x = center.x + radius;
+        edge.y = center.y + radius;
+        edge.z = center.z - radius;
+
+        dot = XMPlaneDotCoord(planes[i], edge);
+        if (dot.x > 0) continue;
+
+        // 6
+        edge.x = center.x + radius;
+        edge.y = center.y - radius;
+        edge.z = center.z + radius;
+
+        dot = XMPlaneDotCoord(planes[i], edge);
+        if (dot.x > 0) continue;
+
+        // 7
+        edge.x = center.x - radius;
+        edge.y = center.y + radius;
+        edge.z = center.z + radius;
+
+        dot = XMPlaneDotCoord(planes[i], edge);
+        if (dot.x > 0) continue;
+
+        // 8
+        edge.x = center.x + radius;
+        edge.y = center.y + radius;
+        edge.z = center.z + radius;
+
+        dot = XMPlaneDotCoord(planes[i], edge);
+        if (dot.x > 0) continue;
+
+        // 이렇게 8번의 continue를 통과하고 여기까지 왔다면
+        // -> dot를 8번이나 계산을 했는데 법선 값이 한 번도 0보다 큰 적이 없었다
+        // -> center와 radius로 정의된 대상 영역이 현재 카메라의 프로스텀 밖으로 나갔다
+        return false;
+    }
+
+    // 여기까지 왔다면 : 반복문을 6번이나, 검사를 48번이나 했는데 한 번도 false가 없었다
+    return true; // 해당 영역의 최소 일부는 반드시 프러스텀 안에 있다
+}

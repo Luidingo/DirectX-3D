@@ -26,7 +26,7 @@ private:
 	};
 
 public:
-	QuadTreeTerrain(wstring heightFile, wstring textureFile);
+	QuadTreeTerrain(wstring heightFile);
 	~QuadTreeTerrain();
 
 	void Render();

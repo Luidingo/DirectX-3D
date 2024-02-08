@@ -142,8 +142,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Framework\Shader\DomainShader.h" />
+    <ClInclude Include="Framework\Shader\HullShader.h" />
     <ClInclude Include="Objects\Particle\ParticleSystem.h" />
     <ClInclude Include="Objects\Landscape\QuadTreeTerrain.h" />
+    <ClInclude Include="Scenes\QuadTreeScene.h" />
     <ClInclude Include="Scenes\TrailScene.h" />
     <ClInclude Include="Objects\Character\RobotA.h" />
     <ClInclude Include="Objects\Items\Weapons\Crowbar.h" />
@@ -258,8 +261,11 @@
     <ClInclude Include="Objects\Landscape\TerrainData.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Framework\Shader\DomainShader.cpp" />
+    <ClCompile Include="Framework\Shader\HullShader.cpp" />
     <ClCompile Include="Objects\Particle\ParticleSystem.cpp" />
     <ClCompile Include="Objects\Landscape\QuadTreeTerrain.cpp" />
+    <ClCompile Include="Scenes\QuadTreeScene.cpp" />
     <ClCompile Include="Scenes\TrailScene.cpp" />
     <ClCompile Include="Objects\Character\RobotA.cpp" />
     <ClCompile Include="Objects\Items\Weapons\Crowbar.cpp" />

@@ -108,6 +108,8 @@ using namespace Utility;
 #include "Framework/Shader/PixelShader.h"
 #include "Framework/Shader/ComputeShader.h"
 #include "Framework/Shader/GeometryShader.h"
+#include "Framework/Shader/HullShader.h"
+#include "Framework/Shader/DomainShader.h"
 
 #include "Framework/State/RasterizerState.h"
 #include "Framework/State/SamplerState.h"

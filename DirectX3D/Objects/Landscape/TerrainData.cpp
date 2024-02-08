@@ -29,7 +29,7 @@ void TerrainData::MakeMesh()
 	vertices.reserve(width * height); // 지금은 형태 정점
 	for (int z = 0; z < height; ++z)
 	{
-		for (int x = 0; x < width; ++z)
+		for (int x = 0; x < width; ++x)
 		{
 			// 정점 준비
 			VertexType vertex;
