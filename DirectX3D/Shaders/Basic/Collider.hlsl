@@ -6,7 +6,7 @@ struct PixelInput
 	float4 pos : SV_POSITION;	
 };
 
-PixelInput VS(VertexUV input)
+PixelInput VS(Vertex input)
 {
 	PixelInput output;
 	output.pos = mul(input.pos, world);

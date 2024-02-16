@@ -42,8 +42,6 @@ void TestActor::Update()
 void TestActor::Render()
 {
     Collider::Render();
-
-    actorUI->Render();
 }
 
 void TestActor::PostRender()

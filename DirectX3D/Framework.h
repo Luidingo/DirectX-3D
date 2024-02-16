@@ -146,6 +146,8 @@ using namespace GameMath;
 #include "Framework/Environment/Camera.h"
 #include "Framework/Environment/Environment.h"
 #include "Framework/Environment/Shadow.h"
+#include "Framework/Environment/Refraction.h"
+#include "Framework/Environment/Reflection.h"
 
 //Object Header
 #include "Objects/Basic/GameObject.h"
@@ -167,6 +169,8 @@ using namespace GameMath;
 #include "Objects/Landscape/TerrainEditor.h"
 #include "Objects/Landscape/SkyBox.h"
 #include "Objects/Landscape/QuadTreeTerrain.h"
+#include "Objects/Landscape/TerrainLOD.h"
+#include "Objects/Landscape/Water.h"
 
 #include "Objects/Algorithm/DNode.h"
 #include "Objects/Algorithm/Dijkstra.h"
@@ -180,10 +184,13 @@ using namespace GameMath;
 #include "Objects/Particle/Rain.h"
 #include "Objects/Particle/Sprite.h"
 
+#include "Objects/TestActor/TestActor.h"
+
 #include "Objects/Character/Human.h"
 #include "Objects/Character/Robot.h"
 #include "Objects/Character/RobotA.h"
 #include "Objects/Character/Naruto.h"
+#include "Objects/Character/Fox.h"
 #include "Objects/Character/FoxD.h"
 #include "Objects/Character/FoxA.h"
 

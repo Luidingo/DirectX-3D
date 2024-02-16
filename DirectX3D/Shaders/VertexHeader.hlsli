@@ -51,6 +51,11 @@ cbuffer FrameInstancingBuffer : register(b4)
 Texture2DArray transformMap : register(t0);
 
 //VertexLayout
+struct Vertex
+{
+	float4 pos : POSITION;	
+};
+
 struct VertexUV
 {
 	float4 pos : POSITION;

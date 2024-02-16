@@ -77,8 +77,14 @@ void Camera::GUIRender()
 
 void Camera::SetView()
 {  
+    // 뷰 포트를 다시 설정하고 카메라 위치에 맞추는 과정 추가
+    view = XMMatrixInverse(nullptr, world); // 카메라의 트랜스폼 뷰 맞추기
+    viewBuffer->Set(view, world); // 뷰 버퍼(뷰와 트랜스폼) 재설정
+
     viewBuffer->SetVS(1);
     viewBuffer->SetPS(1);
+    viewBuffer->SetHS(1);
+    viewBuffer->SetDS(1);
 }
 
 Vector3 Camera::ScreenToWorld(Vector3 screenPos)

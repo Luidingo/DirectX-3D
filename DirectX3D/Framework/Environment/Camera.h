@@ -26,6 +26,8 @@ public:
     bool ContainPoint(Vector3 point);
     bool ContainPoint(Vector3 center, float radius);
 
+    ViewBuffer* GetViewBuffer() { return viewBuffer; }
+
 private:
     void FreeMode();
     void FollowMode();    

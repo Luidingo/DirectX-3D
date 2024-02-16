@@ -68,11 +68,11 @@ void Material::GUIRender()
         ImGui::ColorEdit4("Emissive", (float*)&buffer->Get().emissive);
 
         ImGui::SliderFloat("Shininess", &buffer->Get().shininess, 1, 50);
-        
-        SelectMap("DM", DIFFUSE);   
+
+        SelectMap("DM", DIFFUSE);
         ImGui::SameLine();
         UnselectMap(DIFFUSE);
-        SelectMap("SM", SPECULAR);        
+        SelectMap("SM", SPECULAR);
         ImGui::SameLine();
         UnselectMap(SPECULAR);
         SelectMap("NM", NORMAL);
@@ -83,7 +83,7 @@ void Material::GUIRender()
         LoadDialog();
 
         ImGui::TreePop();
-    }    
+    }
 }
 
 void Material::SetShader(wstring shaderFile)
@@ -94,7 +94,7 @@ void Material::SetShader(wstring shaderFile)
 
 void Material::SetDiffuseMap(wstring textureFile)
 {
-    if(textureFile.length() > 0)
+    if (textureFile.length() > 0)
         diffuseMap = Texture::Add(textureFile);
     else
         diffuseMap = Texture::Add(L"Textures/Color/White.png", L"DM");
@@ -119,7 +119,7 @@ void Material::SetNormalMap(wstring textureFile)
     {
         normalMap = Texture::Add(L"Textures/Color/White.png", L"NM");
         buffer->Get().hasNormalMap = 0;
-    }        
+    }
 }
 
 void Material::Save(string file)
@@ -131,10 +131,10 @@ void Material::Save(string file)
 
     tinyxml2::XMLElement* shader = document->NewElement("Shader");
     string shaderFile;
-    if(vertexShader)
+    if (vertexShader)
         ToString(vertexShader->GetFile());
     shader->SetAttribute("Vertex", shaderFile.c_str());
-    if(pixelShader)
+    if (pixelShader)
         shaderFile = ToString(pixelShader->GetFile());
     shader->SetAttribute("Pixel", shaderFile.c_str());
     material->InsertFirstChild(shader);
@@ -145,7 +145,7 @@ void Material::Save(string file)
     textureFile = ToString(specularMap->GetFile());
     texture->SetAttribute("Specular", textureFile.c_str());
     textureFile = ToString(normalMap->GetFile());
-    texture->SetAttribute("Normal", textureFile.c_str());    
+    texture->SetAttribute("Normal", textureFile.c_str());
     material->InsertEndChild(texture);
 
     tinyxml2::XMLElement* property = document->NewElement("Property");
@@ -179,7 +179,7 @@ void Material::Save(string file)
 
     property->SetAttribute("Shininess", buffer->Get().shininess);
     property->SetAttribute("HasNormalMap", buffer->Get().hasNormalMap);
-    
+
     material->InsertEndChild(property);
 
     document->SaveFile(file.c_str());
@@ -245,8 +245,8 @@ void Material::Load(string file)
 
 void Material::SelectMap(string name, MapType type)
 {
-    ImGui::SetWindowFontScale(2.0f);    
-    ImGui::TextColored(ImVec4(1, 0.5f, 0.8f, 1), name.c_str());    
+    ImGui::SetWindowFontScale(2.0f);
+    ImGui::TextColored(ImVec4(1, 0.5f, 0.8f, 1), name.c_str());
     ImGui::SetWindowFontScale(1.0f);
     ImGui::SameLine();
 
@@ -296,7 +296,7 @@ void Material::SelectMap(string name, MapType type)
                 break;
             default:
                 break;
-            }            
+            }
         }
 
         DIALOG->Close();
@@ -380,7 +380,7 @@ void Material::LoadDialog()
     if (ImGui::Button("Load"))
     {
         DIALOG->OpenDialog(key.c_str(), key.c_str(), ".mat", ".");
-    }        
+    }
 
     if (DIALOG->Display(key.c_str()))
     {

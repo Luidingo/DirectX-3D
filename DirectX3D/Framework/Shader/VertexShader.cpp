@@ -46,7 +46,7 @@ void VertexShader::CreateInputLayout()
 
         D3D11_INPUT_ELEMENT_DESC elementDesc;
         elementDesc.SemanticName = paramDesc.SemanticName;
-        elementDesc.SemanticIndex = paramDesc.SemanticIndex;        
+        elementDesc.SemanticIndex = paramDesc.SemanticIndex;
         elementDesc.InputSlot = 0;
         elementDesc.AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
         elementDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
@@ -56,7 +56,7 @@ void VertexShader::CreateInputLayout()
         {
             if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32)
                 elementDesc.Format = DXGI_FORMAT_R32_UINT;
-            else if(paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32)
+            else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32)
                 elementDesc.Format = DXGI_FORMAT_R32_SINT;
             else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32)
                 elementDesc.Format = DXGI_FORMAT_R32_FLOAT;

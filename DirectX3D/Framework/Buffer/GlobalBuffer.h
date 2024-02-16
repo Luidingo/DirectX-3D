@@ -23,7 +23,7 @@ private:
     struct Data
     {
         Matrix world = XMMatrixIdentity();
-        
+
         int type = 0;
 
         float padding[3];
@@ -183,7 +183,7 @@ class FogBuffer : public ConstBuffer
 {
 private:
     struct Data
-    {        
+    {
         Float4 color = { 1, 1, 1, 1 };
 
         float start = 0.0f;
@@ -196,6 +196,30 @@ public:
     {
     }
 
+    Data& Get() { return data; }
+
+private:
+    Data data;
+};
+
+class WaterBuffer : public ConstBuffer
+{
+private:
+    struct Data
+    {
+        Float4 color = { 1, 1, 1, 1 };
+
+        // 물결 변수
+        float waveTime = 0;         // 물결이 시작되는 시간
+        float waveSpeed = 0.1f;     // 물결 속도
+        float waveScale = 0.1f;     // 물결 크기
+        float waveShininess = 24.f; // 반짝임 (색조 밝게 하기)
+
+        float frensel = 0.5f;       
+        float padding[3];
+    };
+public:
+    WaterBuffer() : ConstBuffer(&data, sizeof(Data)) {}
     Data& Get() { return data; }
 
 private:

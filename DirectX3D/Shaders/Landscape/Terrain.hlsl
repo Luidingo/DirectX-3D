@@ -1,9 +1,15 @@
 #include "../VertexHeader.hlsli"
 #include "../PixelHeader.hlsli"
 
+//Texture2D heightMap : register(b10);
+
 LightPixelInput VS(VertexUVNormalTangent input)
 {
 	LightPixelInput output;
+	
+	//float4 height = heightMap.Load(int3(input.pos.x, input.pos.z, 0));
+	//input.pos.y = height.x;
+	
 	output.pos = mul(input.pos, world);
 	
 	output.viewPos = invView._41_42_43;

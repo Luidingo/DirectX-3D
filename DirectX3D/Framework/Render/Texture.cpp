@@ -9,13 +9,18 @@ Texture::Texture(ID3D11ShaderResourceView* srv, ScratchImage& image, wstring fil
 
 Texture::~Texture()
 {
-    if(!isReferenced)
-        srv->Release();    
+    if (!isReferenced)
+        srv->Release();
 }
 
 void Texture::PSSet(UINT slot)
 {
     DC->PSSetShaderResources(slot, 1, &srv);
+}
+
+void Texture::DSSet(UINT slot)
+{
+    DC->DSSetShaderResources(slot, 1, &srv);
 }
 
 void Texture::ReadPixels(vector<Float4>& pixels)
@@ -45,11 +50,11 @@ Texture* Texture::Add(wstring file)
     HRESULT result;
 
     wstring extension = GetExtension(file);
-    
+
     //if (extension == L"tga")
     if (extension.compare(L"tga") == 0)
         result = LoadFromTGAFile(file.c_str(), nullptr, image);
-    else if(extension.compare(L"dds") == 0)
+    else if (extension.compare(L"dds") == 0)
         result = LoadFromDDSFile(file.c_str(), DDS_FLAGS_NONE, nullptr, image);
     else
         result = LoadFromWICFile(file.c_str(), WIC_FLAGS_NONE, nullptr, image);

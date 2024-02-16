@@ -22,6 +22,8 @@
 #include "Scenes/TrailScene.h"
 #include "Scenes/ParticleConfigScene.h"
 #include "Scenes/QuadTreeScene.h"
+#include "Scenes/TerrainLODScene.h"
+#include "Scenes/WaterScene.h"
 
 // 주말의 과제
 
@@ -54,8 +56,9 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("Particle", new ParticleScene());
     //SceneManager::Get()->Create("Trail", new TrailScene());
     //SceneManager::Get()->Create("ParticleConfig", new ParticleConfigScene());
-    SceneManager::Get()->Create("QuadTree", new QuadTreeScene());
-
+    //SceneManager::Get()->Create("QuadTree", new QuadTreeScene());
+    //SceneManager::Get()->Create("TerrainLOD", new TerrainLODScene());
+    SceneManager::Get()->Create("Water", new WaterScene());
     
 
     SceneManager::Get()->Add("Grid");
@@ -78,7 +81,9 @@ GameManager::GameManager()
     //SceneManager::Get()->Add("Particle");
     //SceneManager::Get()->Add("Trail");
     //SceneManager::Get()->Add("ParticleConfig");
-    SceneManager::Get()->Add("QuadTree");
+    //SceneManager::Get()->Add("QuadTree");
+    //SceneManager::Get()->Add("TerrainLOD");
+    SceneManager::Get()->Add("Water");
 }
 
 GameManager::~GameManager()
